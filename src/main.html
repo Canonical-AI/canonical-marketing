@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marketing Page</title>
+    <style>
+        /* App Bar Styles */
+        .app-bar {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        /* Hero Section Styles */
+        .hero {
+            height: 300px;
+            background: linear-gradient(45deg, #ff6b6b, #f06595, #6a4c93);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2em;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Typing Animation */
+        .typing {
+            border-right: .1em solid white;
+            white-space: nowrap;
+            overflow: hidden;
+            animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite;
+        }
+
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: white; }
+        }
+
+        /* Pricing Cards */
+        .pricing {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+        }
+
+        .card {
+            border: 1px solid #ccc;
+            padding: 20px;
+            width: 30%;
+            text-align: center;
+        }
+
+        /* Feature Explainer */
+        .features {
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- App Bar -->
+    <div class="app-bar">
+        <a href="#home">Home</a>
+        <a href="#features">Features</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#contact">Contact</a>
+    </div>
+
+    <!-- Hero Section -->
+    <div class="hero">
+        <div class="typing">Welcome to Our Amazing Product!</div>
+    </div>
+
+    <!-- Static Paragraph -->
+    <p style="text-align: center; padding: 20px;">Our product offers the best solutions for your needs. Discover the features and pricing below.</p>
+
+    <!-- Pricing Cards -->
+    <div class="pricing">
+        <div class="card">
+            <h3>Basic Plan</h3>
+            <p>$10/month</p>
+        </div>
+        <div class="card">
+            <h3>Standard Plan</h3>
+            <p>$20/month</p>
+        </div>
+        <div class="card">
+            <h3>Premium Plan</h3>
+            <p>$30/month</p>
+        </div>
+    </div>
+
+    <!-- Feature Explainer -->
+    <div class="features">
+        <h2>Features</h2>
+        <p>Our product includes a variety of features designed to help you succeed.</p>
+    </div>
+
+    <script>
+        // JavaScript for typing effect
+        const phrases = ["Welcome to Our Amazing Product!", "Discover the Best Features!", "Join Us Today!"];
+        let i = 0;
+        const typingElement = document.querySelector('.typing');
+
+        function typePhrase() {
+            typingElement.textContent = phrases[i];
+            i = (i + 1) % phrases.length;
+        }
+
+        setInterval(typePhrase, 15000);
+    </script>
+
+</body>
+</html>
