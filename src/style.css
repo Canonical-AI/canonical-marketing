@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  --background: #1A0F15; /* Darker eggplant-black */
+  --surface: #24232A; /* Darker eggplant-black */
+  --surface-bright: #35303A; /* Darker medium eggplant */
+  --surface-light: #4A3B45; /* Darker lighter eggplant */
+  --surface-variant: #2A2228; /* Darker shade of eggplant */
+  --on-surface-variant: #C6B2B5; /* Light beige (for text on dark surfaces) */
+  --primary: #4A7A9B; /* Medium blue */
+  --primary-darken-1: #3A6079; /* Darker blue */
+  --secondary: #D1A181; /* Light beige-orange */
+  --secondary-darken-1: #B38A6D; /* Darker beige-orange */
+  --error: #E74C3C; /* Bright red (inspired by HAL 9000) */
+  --info: #3498DB; /* Bright blue */
+  --success: #4B7D6F; /* Green (not prominent in the film, but needed for UI) */
+  --warning: #F39C12; /* Orange (from the sunrise scenes) */
+
+  --border-color: #A899AD;
+  --border-opacity: 0.3;
+  --high-emphasis-opacity: 0.87;
+  --medium-emphasis-opacity: 0.60;
+  --disabled-opacity: 0.38;
+  --idle-opacity: 0.04;
+  --hover-opacity: 0.04;
+  --focus-opacity: 0.12;
+  --selected-opacity: 0.08;
+  --activated-opacity: 0.12;
+  --pressed-opacity: 0.12;
+  --dragged-opacity: 0.08;
+  --theme-kbd: #212529;
+  --theme-on-kbd: #FFFFFF;
+  --theme-code: #F5F5F5;
+  --theme-on-code: #000000;
+
+  --circle-size: 70%;
+  --blending: hard-light;
+
+}
+
+#app {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 auto;
+  text-align: center;
+}
+
