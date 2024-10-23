@@ -70,11 +70,11 @@ const faqs = ref([
 ]);
 
 const phrases = ref([
-  'Build your artifacts...',
-  'Craft your product canon...',
-  'Unbound your development...',
-  'Embrace your #founder-mode...',
-  'Co-pilot for product peeps...',
+  'Build Artifacts...',
+  'Craft your Canon...',
+  'Unbound Development...',
+  'Embrace #founder-mode...',
+  'Co-pilot for Product...',
 ]);
 
 
