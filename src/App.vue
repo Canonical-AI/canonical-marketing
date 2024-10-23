@@ -2,21 +2,23 @@
   <div class="p-0 m-0 app-root">
     <!-- App Bar -->
 
-    <header class="sticky top-0 bg-surface bg-opacity-40 backdrop-blur-sm shadow-sm z-10">
+    <header :class="{'transparent-header': isTransparent}" class="sticky top-0 bg-surface z-50 transition-background">
       <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
         
         <div class="text-2xl font-bold text-on-surface-variant flex items-center space-x-2"> 
           <img src="/favicon.ico" alt="Canonical" class="logo w-10 h-10" />
-          Canonical
+          Canonical <strong>[BETA]</strong>
         </div>
         <div class="space-x-4">
-          <a href="#pricing" class="text-on-surface-variant hover:text-primary transition-colors">Pricing</a>
-          <a href="#features" class="text-on-surface-variant hover:text-primary transition-colors">Features</a>
-          <a href="#contact" class="text-on-surface-variant hover:text-primary transition-colors">About</a>
-          <a href="#cta" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors">Get Started</a>
+          <!-- <a href="#pricing" class="text-on-surface-variant hover:text-primary transition-colors">Pricing</a> -->
+          <!-- <a href="#features" class="text-on-surface-variant hover:text-primary transition-colors">Features</a> -->
+          <a class="text-on-surface-variant hover:text-primary transition-colors" @click="toggleFAQ">About</a>
+          <a href="https://canonical-dev-b6afd.firebaseapp.com" class="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary-darken-1 transition-colors">beta access</a>
         </div>
       </nav>
     </header>
+
+    <FAQ v-if="openFAQ" />
 
     <!-- Hero Section -->
     
@@ -27,23 +29,30 @@
       <div class="gradient-blob-3"></div>
       <div class="gradient-blob-4"></div>
       <div class="hero-content">
-        <div class="typing">>{{ currentPhrase }}</div>
-        <button href="#cta" class="mx-2 bg-primary text-white px-4 py-2 rounded-md hover:bg-primary-darken-1 transition-colors">Launch</button>
+        <div class="typing my-10">>{{ currentPhrase }}</div>
+        <a href="https://canonical-dev-b6afd.firebaseapp.com" class="mx-2 my-5 bg-primary text-2xl text-white px-4 py-2 rounded-md hover:bg-primary-darken-1 transition-colors z-50">Launch Beta &#128640;</a>
       </div>
     </div>
 
     <!-- Static Paragraph -->
-    <section id="overview">
-      <p style="text-align: center; padding: 20px;">
-          For <strong>product teams</strong>, who need to **organize their product artifacts**  to keep stakeholders coordinated, developers building the right thing, and product on track. Canonical, enables **seemless artifact creation**, **curation** and **collaboration.** *Unlike* Jira, or Microsoft Office, *Canonical* is specifically tailored to product team built off the best thought leaders practices and bootstrapped by hundreds of product manager, *canonical* leverages specialised trained AI models that unlock product management productivity
+    <section id="overview" class="overview flex items-center justify-center">
+      <p style="text-align: center; padding: 20px;" class="text-2xl">
+        Stay on course with <strong> effortless</strong> artifact creation, curation, and collaboration.  Built on insights from leading product managers, it streamlines your processes, ensuring that stakeholders remain in sync and developers focus on the right priorities.
+      </p>
+    </section>
 
+    <section id="cta1" class="flex items-center justify-right">
+      <p style="text-align: left; padding: 20px;" class="text-xl">
+        Canonical is currently in beta. 
+        Visit Canonical.dev to get started. 
+        Or Signup for updates below.
       </p>
     </section>
 
     <!-- Pricing Cards -->
-    <section id="pricing">
+    <!-- <section id="pricing">
       <div class="pricing">
-        <div class="card border border-gray-300 p-5 w-1/3 text-center m-1 rounded-lg z-10" v-for="(plan, index) in plans" :key="index">
+        <div class="card border border-surface-variant p-5 w-1/3 text-center m-1 rounded-lg z-10" v-for="(plan, index) in plans" :key="index">
           <h2 class="text-2xl font-bold">{{ plan.name }}</h2>
           <h3 class="text-lg font-semibold">{{ plan.price }}</h3>
           <h4 class="font-semibold text-left">Includes</h4>
@@ -53,42 +62,30 @@
           <button class="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary-darken-1 transition-colors">Get Started</button>
         </div>
       </div>
-    </section>
-
-
-    <!-- Feature Explainer -->
-    <section id="features" class="bg-white py-16">
-      <div class="container mx-auto px-6">
-        <h2 class="text-3xl font-bold text-center mb-12">Key Features</h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div v-for="feature in features" :key="feature.title" class="text-center p-6 rounded-lg transition-all duration-300 hover:shadow-md">
-            <svg class="h-12 w-12 text-blue-500 mx-auto mb-4" viewBox="0 0 24 24">
-            <path :d="feature.icon" />
-          </svg>
-            <h3 class="text-xl font-semibold mb-2">{{ feature.title }}</h3>
-            <p class="text-gray-600">{{ feature.description }}</p>
-          </div>
-        </div>
-      </div>
-    </section>
+    </section> -->
 
 
         <!-- Call to Action Section -->
-        <section id="cta" class="bg-success text-white py-16">
+      <section id="cta2" class="bg-success text-white py-8">
       <div class="container mx-auto px-6 text-center">
-        <h2 class="text-3xl font-bold mb-4">Ready to Get Started?</h2>
-        <p class="text-xl mb-8">Join thousands of satisfied customers and transform your business today.</p>
-        <a href="#" class="bg-white text-blue-500 px-8 py-3 rounded-md text-lg hover:bg-gray-100 transition-colors inline-flex items-center">
+        <h2 class="text-3xl font-bold mb-4">Signup for updates</h2>
+        <form>
+          <input type="email" placeholder="Email" class="px-4 py-2 rounded-md">
+          <button class="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary-darken-1 transition-colors">Signup</button>
+        </form>
+        <!-- <p class="text-xl mb-8">Join thousands of satisfied customers and transform your business today.</p> -->
+        <!-- <a href="#" class="bg-white text-blue-500 px-8 py-3 rounded-md text-lg hover:bg-gray-100 transition-colors inline-flex items-center">
           Start Your Free Trial
           <svg class="ml-2 h-5 w-5" viewBox="0 0 24 24">
             <path :d="mdiArrowRight" />
           </svg>
-        </a>
+        </a> -->
       </div>
     </section>
 
+
     <!-- Footer -->
-    <footer class="bg-gray-800 text-white py-8">
+    <footer class="bg-surface text-white py-8">
       <div class="container mx-auto px-6 text-center">
         <p>&copy; 2077 Canonical. All rights reserved.</p>
       </div>
@@ -98,9 +95,14 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import { mdiArrowRight, mdiChartBar, mdiClockOutline, mdiAccountGroup } from '@mdi/js';
+import FAQ from './FAQ.vue';
 
+const openFAQ = ref(false);
+const toggleFAQ = () => {
+  openFAQ.value = !openFAQ.value;
+};
 
 const phrases = ref([
   'Build your artifacts...',
@@ -112,19 +114,16 @@ const phrases = ref([
 
 const features = ref([
   {
-    icon: mdiChartBar,
-    title: 'Advanced Analytics',
-    description: 'Gain valuable insights with our powerful analytics tools.'
+    title: 'Know your Product',
+    description: 'Leverage specialized AI models to streamline the creation and management of your product artifacts.'
   },
   {
-    icon: mdiClockOutline,
-    title: 'Time-Saving Automation',
-    description: 'Automate repetitive tasks and focus on what matters most.'
+    title: 'Keep organized, keep track',
+    description: 'Organize everything in one place to ensure nothing falls through the cracks—whether it’s user stories, roadmaps, or feature requests.'
   },
   {
-    icon: mdiAccountGroup,
-    title: 'Team Collaboration',
-    description: 'Seamlessly work together with your team in real-time.'
+    title: 'Collaborate with your virtual-peers',
+    description: 'Canonical lets you bounce ideas off your virtual-peers, and get feedback from a virtual-community of product managers.'
   }
 ])
 
@@ -165,6 +164,40 @@ const plans = ref([
   { name: 'Pro', price: '$20/month' , includes: ['1000 Artifacts', '100 Users', '10000 Views'] },
   { name: 'Enterprise', price: 'Email for pricing' , includes: ['1000 Artifacts', '100 Users', '10000 Views'] }
 ]);
+
+const isTransparent = ref(true);
+
+const handleScroll = () => {
+  const heroHeight = document.querySelector('.hero').offsetHeight;
+  isTransparent.value = window.scrollY < heroHeight;
+};
+
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll);
+});
+
+// Add this function to handle the faster parallax effect
+const handleParallax = () => {
+  const overviewSection = document.querySelector('.overview');
+  const scrollPosition = window.scrollY;
+  const parallaxSpeed = 0.7; // Increase this value to make it scroll up faster
+
+  // Calculate the new position
+  const offset = scrollPosition * parallaxSpeed;
+  overviewSection.style.transform = `translateY(-${offset}px)`; // Use negative to move up
+};
+
+onMounted(() => {
+  window.addEventListener('scroll', handleParallax);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleParallax);
+});
 </script>
 
 <style scoped>
@@ -178,7 +211,7 @@ const plans = ref([
      width: 100%;
      height: 100%;
      background: url('/grain.png') repeat;
-     opacity: 0.04; /* Adjust opacity as needed */
+     opacity: 0.06; /* Adjust opacity as needed */
      pointer-events: none;
      z-index: 1; /* Ensure it overlays the content */
    }
@@ -202,9 +235,9 @@ const plans = ref([
   display: flex;
   align-items: center; /* Center children vertically */
   justify-content: center; /* Center children horizontally */
-  height: 300px;
+  overflow-x: hidden;
   color: white;
-  height: 90vh;
+  height: 80vh;
 }
 
 
@@ -230,7 +263,8 @@ const plans = ref([
     position: absolute;
     background: radial-gradient(circle at center, rgba(var(--warning-rgb), 0.8) 0, rgba(var(--primary-rgb), 0) 50%);
     /* background: radial-gradient(circle at center, red 0, black 50%) no-repeat; */
-   
+    overflow: hidden;
+
     mix-blend-mode: var(--blending);
 
     width: var(--circle-size);
@@ -249,6 +283,7 @@ const plans = ref([
     position: absolute;
     background: radial-gradient(circle at center, rgba( var(--success-rgb), 1) 0, rgba( var(--secondary-rgb), 0) 50%) no-repeat;
     mix-blend-mode: var(--blending);
+    overflow: hidden;
 
     width: var(--circle-size);
     height: var(--circle-size);
@@ -267,6 +302,7 @@ const plans = ref([
     background: radial-gradient(circle at center, rgba(var(--primary-rgb), 0.8) 0, rgba(var(--warning-rgb), 0) 50%) no-repeat;
     mix-blend-mode: var(--blending);
 
+
     width: var(--circle-size);
     height: var(--circle-size);
     top: calc(50% - var(--circle-size));
@@ -283,6 +319,7 @@ const plans = ref([
     position: absolute;
     background: radial-gradient(circle at center, rgba(194, 70, 152, 0.8) 0, rgba(var(--warning-rgb), 0) 50%) no-repeat;
     mix-blend-mode: var(--blending);
+
 
     width: var(--circle-size);
     height: var(--circle-size);
@@ -324,7 +361,6 @@ const plans = ref([
   100% {top: 83.33%; right: 0%; transform: scale(1);}
 }
 
-
 .hero-content{
   z-index: 1;
 }
@@ -346,6 +382,51 @@ const plans = ref([
   50% { border-color: white; }
 }
 
+
+.overview {
+  position: relative;
+  overflow: hidden;
+  z-index: 10;
+  height: 60vh;
+  padding: 60px;
+  background: radial-gradient(circle, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0) 100%);
+  border-radius: 15px;
+  opacity: 0.9;
+  transform: translateY(0); /* Initial position */
+  transition: transform 0.1s ease-out; /* Smooth transition */
+}
+
+.overview::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 70%, rgba(0, 0, 0, 0) 100%);
+  z-index: -10;
+  filter: blur(30px);
+}
+
+/* .overview::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: 50px 50px;
+  background-image: 
+    linear-gradient(135deg, rgba(var(--primary-rgb), 0.5) 25%, transparent 25%),
+    linear-gradient(225deg, rgba(var(--secondary-rgb), 0.5) 25%, transparent 25%),
+    linear-gradient(45deg, rgba(var(--primary-rgb), 0.5) 25%, transparent 25%),
+    linear-gradient(315deg, rgba(var(--primary-rgb), 0.5) 25%, transparent 25%);
+  background-blend-mode: multiply;
+  background-position: 0 0, 50px 0, 0 50px, 50px 50px;
+  opacity: 0.2;
+  z-index: -1;
+} */
+
 /* Pricing Cards */
 .pricing {
   display: flex;
@@ -354,8 +435,9 @@ const plans = ref([
 }
 
 .card {
-  background-color: var(--background);
-  filter: invert(1);
+  background-color: var(--surface);
+  border-color: var(--on-surface-variant);
+
 }
 
 /* Feature Explainer */
@@ -363,5 +445,21 @@ const plans = ref([
   padding: 20px;
   background-color: #f9f9f9;
 }
+
+.transparent-header {
+  background-color: transparent !important;
+}
+
+.transition-background {
+  transition: background-color 0.3s ease;
+}
 </style>
+
+
+
+
+
+
+
+
 
