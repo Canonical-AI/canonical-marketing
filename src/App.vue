@@ -2,11 +2,11 @@
   <div class="app-root h-screen w-full overflow-clip flex flex-col">
     <!-- App Bar -->
 
-    <header class="sticky top-0 z-50 bg-transparent">
+    <header class="sticky top-0 z-50 bg-transparent" :class="{ 'bg-surface': openFAQ }">
       <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
         
-        <div class="md:text-xl lg:text-2xl font-bold text-on-surface-variant flex items-center space-x-2"> 
-          <img src="/favicon.ico" alt="Canonical" class="logo w-10 h-10" />
+        <div class="md:text-xl lg:text-2xl  text-on-surface-variant flex items-center space-x-2"> 
+          <img src="/favicon.ico" alt="Canonical" class="logo w-10 h-10 mx-2" />
           Canonical <strong>[BETA]</strong>
         </div>
         <div class="space-x-4">
@@ -16,7 +16,13 @@
       </nav>
     </header>
 
-    <FAQ v-if="openFAQ" />
+    <div v-if="openFAQ" class="faq p-8 px-24 bg-surface z-50">
+      <h1 class="text-left text-2xl mb-5 font-light">Frequently Asked Questions</h1>
+      <div v-for="(faq, index) in faqs" :key="index" class="faq-item text-left mb-5">
+        <h2 class="text-lg mb-2.5 font-semibold">{{ faq.question }}</h2>
+        <p class="text-md">{{ faq.answer }}</p>
+      </div>
+    </div>
 
     <!-- Hero Section -->
     
@@ -28,8 +34,8 @@
       <div class="gradient-blob-4"></div>
       <div class="z-10">
         <div class="md:text-xl lg:text-5xl typing my-16">> {{ currentPhrase }}</div>
-        <h2 class="md:text-xl lg:text-2xl font-light my-4">coming soon...</h2>
-        <a href="https://canonical-dev-b6afd.firebaseapp.com" class="mx-2 my-4 bg-warning md:text-xl lg:text-2xl text-white px-8 py-2 rounded-full hover:bg-primary-darken-1 transition-colors z-50">Launch Beta &#128640;</a>
+        <h2 class="md:text-lg lg:text-xl font-light my-6">coming soon...</h2>
+        <a href="https://canonical-dev-b6afd.firebaseapp.com" class="mx-2 my-6 bg-warning md:text-lg lg:text-xl text-white px-8 py-2 rounded-full hover:bg-primary-darken-1 transition-colors z-50">Launch Beta &#128640;</a>
       </div>
     </div>
 
@@ -44,12 +50,20 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue';
-import FAQ from './FAQ.vue';
 
 const openFAQ = ref(false);
 const toggleFAQ = () => {
   openFAQ.value = !openFAQ.value;
 };
+
+const faqs = ref([
+
+{ question: 'What is Canonical?', answer: 'Canonical is a platform for artifact creation, curation, and collaboration. Designed for product people by a proudct person. Why should devs get all the cool tools?. My vision is to blur the lines between engineering and product work and enable more people to build great products.' },
+{ question: 'Who Built Canonical?', answer: 'My name is John Azzinaro, Ex-AWS Technical Product Manager, with over five years of product management experience, and 10 years working in engineering.' },
+{ question: 'Why Did you build it?', answer: 'Ive been coding for over a decade, and I wanted to build a tool that would make it easier for the people doing all the "soft stuff" to do their jobs like engineers do. in engineering we have concepts like commits, versioning, referencing and reviewing. This is the first step in that direction.' },
+{ question: 'Whats next?', answer: 'Visit Github to see the public roadmap, or visit the demo site to see all of the product artifacts for Canonical live!' },
+// Add more FAQs as needed
+]);
 
 const phrases = ref([
   'Build your artifacts...',
@@ -59,20 +73,6 @@ const phrases = ref([
   'Co-pilot for product peeps...',
 ]);
 
-const features = ref([
-  {
-    title: 'Know your Product',
-    description: 'Leverage specialized AI models to streamline the creation and management of your product artifacts.'
-  },
-  {
-    title: 'Keep organized, keep track',
-    description: 'Organize everything in one place to ensure nothing falls through the cracks—whether it’s user stories, roadmaps, or feature requests.'
-  },
-  {
-    title: 'Collaborate with your virtual-peers',
-    description: 'Canonical lets you bounce ideas off your virtual-peers, and get feedback from a virtual-community of product managers.'
-  }
-])
 
 const currentPhrase = ref('');
 let i = 0;
