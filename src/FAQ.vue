@@ -1,9 +1,9 @@
 <template>
-    <div class="faq p-5">
+    <div class="faq p-8 px-24 bg-surface z-50">
       <h1 class="text-left text-2xl mb-5 font-light">Frequently Asked Questions</h1>
       <div v-for="(faq, index) in faqs" :key="index" class="faq-item text-left mb-5">
-        <h2 class="text-xl mb-2.5 font-semibold">{{ faq.question }}</h2>
-        <p class="text-lg">{{ faq.answer }}</p>
+        <h2 class="text-lg mb-2.5 font-semibold">{{ faq.question }}</h2>
+        <p class="text-md">{{ faq.answer }}</p>
       </div>
     </div>
   </template>

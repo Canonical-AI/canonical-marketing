@@ -13,7 +13,6 @@ function hexToRgb(hex) {
     return `${r}, ${g}, ${b}`; // Return as a comma-separated string
 }
 
-
 document.addEventListener('DOMContentLoaded', () => {
     const root = document.documentElement;
     const variables = [
