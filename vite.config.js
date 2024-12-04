@@ -17,5 +17,5 @@ export default defineConfig({
       }
     }
   },
-  base: process.env.BASE_URL || '/',
+  base: process.env.BASE_URL || '/dist/',
 });
