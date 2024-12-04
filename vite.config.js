@@ -17,5 +17,5 @@ export default defineConfig({
       }
     }
   },
-  base: '/canonical-dev-marketing-page-static/dist/' // hardcoded sue me
+  base: process.env.BASE_URL || '/',
 });
