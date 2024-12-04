@@ -23,8 +23,8 @@
         <p class="text-md">{{ faq.answer }}</p>
       </div>
       <div class="flex justify-end">
-        <a href="https://github.com/your-github-username" class="text-on-surface-variant hover:text-primary transition-colors mx-2">GitHub</a>
-        <a href="https://www.linkedin.com/in/your-linkedin-username" class="text-on-surface-variant hover:text-primary transition-colors mx-2">LinkedIn</a>
+        <a href="https://github.com/Canonical-AI" class="text-on-surface-variant hover:text-primary transition-colors mx-2">GitHub</a>
+        <a href="https://www.linkedin.com/in/john-azzinaro-mba-6a1a6b59/" class="text-on-surface-variant hover:text-primary transition-colors mx-2">LinkedIn</a>
       </div>
     </div>
 
