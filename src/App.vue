@@ -39,7 +39,7 @@
       <div class="z-10">
         <div class="md:text-xl lg:text-5xl typing my-16">> {{ currentPhrase }}</div>
         <h2 class="md:text-lg lg:text-xl font-light my-6">coming soon...</h2>
-        <a href="https://canonical-dev-b6afd.firebaseapp.com" class="mx-2 my-6 bg-warning md:text-lg lg:text-xl text-white px-8 py-2 rounded-full hover:bg-primary-darken-1 transition-colors z-50">Launch Beta &#128640;</a>
+        <a href="https://canonical-prod.web.app/document/7Smjq3YGDK2YW2ULrbMv?v=1.0.0" class="mx-2 my-6 bg-warning md:text-lg lg:text-xl text-white px-8 py-2 rounded-full hover:bg-primary-darken-1 transition-colors z-50">Launch Beta &#128640;</a>
       </div>
     </div>
 
