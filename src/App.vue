@@ -11,7 +11,7 @@
         </div>
         <div class="space-x-4">
           <a class="text-on-surface-variant hover:text-primary transition-colors" @click="toggleFAQ">About</a>
-          <a href="https://canonical-dev-b6afd.firebaseapp.com/document/7Smjq3YGDK2YW2ULrbMv?v=v1.0.0" class="bg-warning text-white px-4 py-2 rounded-md hover:bg-primary-darken-1 transition-colors">try</a>
+          <a href="https://canonical-prod.web.app/document/7Smjq3YGDK2YW2ULrbMv?v=1.0.0" class="bg-warning text-white px-4 py-2 rounded-md hover:bg-primary-darken-1 transition-colors">try</a>
         </div>
       </nav>
     </header>
@@ -44,8 +44,8 @@
     </div>
 
     <div class="hero-footer fixed bottom-0 left-0 right-0 flex justify-center items-center p-2 space-x-4">
-      <a class="text-on-surface-variant hover:text-primary transition-colors" @click="toggleFAQ">privacy</a>
-      <a class="text-on-surface-variant hover:text-primary transition-colors" @click="toggleFAQ">terms</a>
+      <a href="https://github.com/Canonical-AI/.github/blob/main/Privacy.md" class="text-on-surface-variant hover:text-primary transition-colors">privacy</a>
+      <a href="https://github.com/Canonical-AI/.github/blob/main/Terms.md" class="text-on-surface-variant hover:text-primary transition-colors">terms</a>
       <p> &copy; 2024 Canonical </p>
     </div>
 
