@@ -7,11 +7,11 @@
         
         <div class="md:text-xl lg:text-2xl  text-on-surface-variant flex items-center space-x-2"> 
           <img src="/favicon.ico" alt="Canonical" class="logo w-10 h-10 mx-2" />
-          Canonical <strong>[BETA]</strong>
+          Canonical 
         </div>
         <div class="space-x-4">
           <a class="text-on-surface-variant hover:text-primary transition-colors" @click="toggleFAQ">About</a>
-          <a href="https://canonical-prod.web.app/document/7Smjq3YGDK2YW2ULrbMv?v=1.0.0" class="bg-warning text-white px-4 py-2 rounded-md hover:bg-primary-darken-1 transition-colors">try</a>
+          <a href="https://canonical-prod.web.app/document/7Smjq3YGDK2YW2ULrbMv?v=1.0.0" target="_blank" rel="noopener noreferrer" class="bg-warning text-white px-4 py-2 rounded-md hover:bg-primary-darken-1 transition-colors">try</a>
         </div>
       </nav>
     </header>
@@ -23,37 +23,46 @@
         <p class="text-md">{{ faq.answer }}</p>
       </div>
       <div class="flex justify-end">
-        <a href="https://github.com/Canonical-AI" class="text-on-surface-variant hover:text-primary transition-colors mx-2">GitHub</a>
-        <a href="https://www.linkedin.com/in/john-azzinaro-mba-6a1a6b59/" class="text-on-surface-variant hover:text-primary transition-colors mx-2">LinkedIn</a>
+        <a href="https://github.com/Canonical-AI" target="_blank" rel="noopener noreferrer" class="text-on-surface-variant hover:text-primary transition-colors mx-2">GitHub</a>
+        <a href="https://www.linkedin.com/in/john-azzinaro-mba-6a1a6b59/" target="_blank" rel="noopener noreferrer" class="text-on-surface-variant hover:text-primary transition-colors mx-2">LinkedIn</a>
       </div>
     </div>
 
     <!-- Hero Section -->
     
     <div class="hero ">
-      <div class="hero-gradient"></div>
-      <div class="gradient-blob-1"></div>
-      <div class="gradient-blob-2"></div>
-      <div class="gradient-blob-3"></div>
-      <div class="gradient-blob-4"></div>
+      <!-- WebGL Background -->
+      <div ref="backgroundContainer" class="background-container">
+        <img ref="backgroundImage" src="/login-background.avif" alt="" class="background-image-hidden" />
+      </div>
+      
       <div class="z-10">
         <div class="md:text-xl lg:text-5xl typing my-16">> {{ currentPhrase }}</div>
-        <h2 class="md:text-lg lg:text-xl font-light my-6">coming soon...</h2>
-        <a href="https://canonical-prod.web.app/document/7Smjq3YGDK2YW2ULrbMv?v=1.0.0" class="mx-2 my-6 bg-warning md:text-lg lg:text-xl text-white px-8 py-2 rounded-full hover:bg-primary-darken-1 transition-colors z-50">Launch Beta &#128640;</a>
+        <a href="https://canonical-prod.web.app/document/7Smjq3YGDK2YW2ULrbMv?v=1.0.0" target="_blank" rel="noopener noreferrer" class="mx-2 my-6 bg-warning md:text-lg lg:text-xl text-white px-8 py-2 rounded-full hover:bg-primary-darken-1 transition-colors z-50">Launch &#128640;</a>
       </div>
     </div>
 
     <div class="hero-footer fixed bottom-0 left-0 right-0 flex justify-center items-center p-2 space-x-4">
-      <a href="https://github.com/Canonical-AI/.github/blob/main/Privacy.md" class="text-on-surface-variant hover:text-primary transition-colors">privacy</a>
-      <a href="https://github.com/Canonical-AI/.github/blob/main/Terms.md" class="text-on-surface-variant hover:text-primary transition-colors">terms</a>
-      <p> &copy; 2024 Canonical </p>
+      <a href="https://github.com/Canonical-AI/.github/blob/main/Privacy.md" target="_blank" rel="noopener noreferrer" class="text-on-surface-variant hover:text-primary transition-colors">privacy</a>
+      <a href="https://github.com/Canonical-AI/.github/blob/main/Terms.md" target="_blank" rel="noopener noreferrer" class="text-on-surface-variant hover:text-primary transition-colors">terms</a>
+      <p> &copy; 2025 Canonic-ai.com </p>
     </div>
 
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted, onUnmounted, nextTick } from 'vue';
+import { 
+  Scene, 
+  OrthographicCamera, 
+  WebGLRenderer, 
+  PlaneGeometry, 
+  ShaderMaterial, 
+  Mesh, 
+  TextureLoader,
+  Vector2 
+} from 'three';
 
 const openFAQ = ref(false);
 const toggleFAQ = () => {
@@ -70,13 +79,14 @@ const faqs = ref([
 ]);
 
 const phrases = ref([
-  'Build Artifacts...',
-  'Craft your Canon...',
-  'Unbound Development...',
-  'Embrace #founder-mode...',
-  'Co-pilot for Product...',
-]);
+    'The AI for Product.',  
+  'Build Artifacts.',
+  'Craft your Canon.',
+  'Unbound Development.',
+  'Embrace #founder-mode.',
+  'Co-pilot for Product.',
 
+]);
 
 const currentPhrase = ref('');
 let i = 0;
@@ -106,16 +116,191 @@ const typePhrase = () => {
   setTimeout(typePhrase, isDeleting ? deletingSpeed : typingSpeed);
 };
 
+// WebGL Background Setup
+const backgroundContainer = ref(null);
+const backgroundImage = ref(null);
+
+// Three.js scene variables
+let scene, camera, renderer, planeMesh;
+let animationId = null;
+
+// Animation state
+let animationTime = 0;
+
+const ANIMATION_CONFIG = {
+  waveIntensity: 0.060,
+  timeSpeed: 0.008
+};
+
+// Shaders
+const vertexShader = `
+  varying vec2 vUv;
+  void main() {
+    vUv = uv;
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+  }
+`;
+
+const fragmentShader = `
+  uniform float u_time;
+  uniform vec2 u_mouse;
+  uniform float u_intensity;
+  uniform sampler2D u_texture;
+  varying vec2 vUv;
+
+  void main() {
+    vec2 uv = vUv;
+    float wave1 = sin(uv.x * 10.0 + u_time * 0.5 + u_mouse.x * 5.0) * u_intensity;
+    float wave2 = sin(uv.y * 12.0 + u_time * 0.8 + u_mouse.y * 4.0) * u_intensity;
+    float wave3 = cos(uv.x * 8.0 + u_time * 0.5 + u_mouse.x * 3.0) * u_intensity;
+    float wave4 = cos(uv.y * 9.0 + u_time * 0.7 + u_mouse.y * 3.5) * u_intensity;
+
+    uv.y += wave1 + wave2;
+    uv.x += wave3 + wave4;
+    
+    gl_FragColor = texture2D(u_texture, uv);
+  }
+`;
+
+const initializeScene = (texture) => {
+  const container = backgroundContainer.value;
+  if (!container) {
+    console.warn('Container not available for Three.js initialization');
+    return;
+  }
+  
+  // Ensure container has dimensions
+  const width = container.offsetWidth || window.innerWidth;
+  const height = container.offsetHeight || window.innerHeight;
+  
+  if (width === 0 || height === 0) {
+    console.warn('Container has no dimensions, retrying...');
+    setTimeout(() => initializeScene(texture), 100);
+    return;
+  }
+  
+  // Camera setup - use orthographic camera for full coverage
+  camera = new OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
+  camera.position.z = 1;
+  
+  // Scene creation
+  scene = new Scene();
+  
+  // Uniforms
+  const shaderUniforms = {
+    u_time: { type: "f", value: 1.0 },
+    u_mouse: { type: "v2", value: new Vector2(0.5, 0.5) },
+    u_intensity: { type: "f", value: ANIMATION_CONFIG.waveIntensity },
+    u_texture: { type: "t", value: texture }
+  };
+  
+  // Create a plane mesh that covers the full viewport
+  planeMesh = new Mesh(
+    new PlaneGeometry(2, 2),
+    new ShaderMaterial({
+      uniforms: shaderUniforms,
+      vertexShader,
+      fragmentShader
+    })
+  );
+  
+  // Add mesh to the scene
+  scene.add(planeMesh);
+  
+  // Renderer
+  renderer = new WebGLRenderer({ 
+    alpha: false, 
+    antialias: true,
+    preserveDrawingBuffer: false,
+    powerPreference: "high-performance"
+  });
+  renderer.setSize(width, height);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  
+  // Clear any existing canvas
+  while (container.firstChild) {
+    container.removeChild(container.firstChild);
+  }
+  
+  // Create canvas
+  container.appendChild(renderer.domElement);
+  
+  // Start animation
+  animateScene();
+  
+};
+
+const animateScene = () => {
+  if (!planeMesh || !renderer) return;
+  
+  animationId = requestAnimationFrame(animateScene);
+  
+  // Update animation time
+  animationTime += ANIMATION_CONFIG.timeSpeed;
+  
+  // Create gentle looping movement for the wave center
+  const loopX = 0.5 + Math.sin(animationTime * 0.3) * 1.6;
+  const loopY = 0.5 + Math.cos(animationTime * 0.2) * 1.2;
+  
+  // Update uniforms
+  const uniforms = planeMesh.material.uniforms;
+  uniforms.u_intensity.value = ANIMATION_CONFIG.waveIntensity;
+  uniforms.u_time.value = animationTime;
+  uniforms.u_mouse.value.set(loopX, loopY);
+  
+  // Render
+  renderer.render(scene, camera);
+};
+
+const handleResize = () => {
+  if (!camera || !renderer || !backgroundContainer.value) return;
+  
+  const container = backgroundContainer.value;
+  // For orthographic camera, we don't need to update aspect ratio
+  // The camera already covers the full viewport with -1 to 1 coordinates
+  renderer.setSize(container.offsetWidth, container.offsetHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+};
+
 onMounted(() => {
   typePhrase();
+  
+  // Add resize listener
+  window.addEventListener('resize', handleResize);
+  
+  // Wait for next tick to ensure DOM is fully rendered
+  nextTick(() => {
+    // Small delay to ensure container has proper dimensions
+    setTimeout(() => {
+      const textureLoader = new TextureLoader();
+      textureLoader.load('/login-background.avif', (texture) => {
+        initializeScene(texture);
+        // Force a resize after initialization to ensure proper sizing
+        setTimeout(() => {
+          handleResize();
+        }, 100);
+      });
+    }, 50);
+  });
+});
+
+onUnmounted(() => {
+  // Cleanup
+  if (animationId) {
+    cancelAnimationFrame(animationId);
+  }
+  
+  if (renderer) {
+    renderer.dispose();
+  }
+  
+  window.removeEventListener('resize', handleResize);
 });
 
 </script>
 
 <style scoped>
 /* App Bar Styles */
-
-
 
 .app-root::before {
      content: '';
@@ -134,6 +319,7 @@ onMounted(() => {
   position: relative; /* Ensure it is positioned relative to the viewport */
   overflow-x: hidden; /* Prevent horizontal overflow */
 }
+
 /* Hero Section Styles */
 .hero {
   position: absolute; /* Establish a positioning context for absolute children */
@@ -147,127 +333,34 @@ onMounted(() => {
   width: 100vw;
 }
 
-.hero-gradient {
+/* WebGL Background */
+.background-container {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(42deg, 
-              var(--background) 0%, 
-              var(--success) 45%, 
-              var(--secondary-darken-1) 56%, 
-              var(--primary) 78%, 
-              var(--surface) 100%);
-  z-index: 0; /* Ensure this is behind the typing class */
-  filter: url(#goo) blur(50px) ;
-  opacity: 0.7;
-
+  z-index: 0;
+  overflow: hidden;
+  filter: blur(15px);
 }
 
-.gradient-blob-1 {
-    position: absolute;
-    background: radial-gradient(circle at center, rgba(var(--warning-rgb), 0.8) 0, rgba(var(--primary-rgb), 0) 50%);
-    /* background: radial-gradient(circle at center, red 0, black 50%) no-repeat; */
-
-    mix-blend-mode: var(--blending);
-
-    width: var(--circle-size);
-    height: var(--circle-size);
-    top: calc(50% - var(--circle-size) / 2);
-    left: calc(50% - var(--circle-size) / 2);
-    filter: url(#goo) blur(20px) ;
-
-    transform-origin: center center;
-    animation: yellow 20s ease infinite;
-
-    opacity: .8;
-  }
-
-.gradient-blob-2 {
-    position: absolute;
-    background: radial-gradient(circle at center, rgba( var(--success-rgb), 1) 0, rgba( var(--secondary-rgb), 0) 50%) no-repeat;
-    mix-blend-mode: var(--blending);
-
-    width: var(--circle-size);
-    height: var(--circle-size);
-    top: calc(50% - var(--circle-size) / 2);
-    left: calc(50% - var(--circle-size) / 2);
-
-    transform-origin: calc(50% - 400px);
-    animation: green 20s reverse infinite;
-    filter: url(#goo) blur(20px) ;
-
-    opacity: 1;
-  }
-
-.gradient-blob-3 {
-    position: absolute;
-    background: radial-gradient(circle at center, rgba(var(--primary-rgb), 0.8) 0, rgba(var(--warning-rgb), 0) 50%) no-repeat;
-    mix-blend-mode: var(--blending);
-
-    width: var(--circle-size);
-    height: var(--circle-size);
-    top: calc(50% - var(--circle-size));
-    left: calc(50% - var(--circle-size) / 2);
-
-    transform-origin: calc(50% + 400px);
-    animation: red 40s linear infinite;
-    filter: url(#goo) blur(20px) ;
-
-    opacity: 1;
-  }
-
-.gradient-blob-4 {
-    position: absolute;
-    background: radial-gradient(circle at center, rgba(194, 70, 152, 0.8) 0, rgba(var(--warning-rgb), 0) 50%) no-repeat;
-    mix-blend-mode: var(--blending);
-
-    width: var(--circle-size);
-    height: var(--circle-size);
-    top: calc(50% - var(--circle-size));
-    left: calc(50% - var(--circle-size) / 2);
-
-    transform-origin: calc(50% + 400px);
-    animation: purple 30s linear infinite;
-    filter: url(#goo) blur(20px) ;
-
-    opacity: 1;
-  }
-
-  @keyframes yellow {
-  0% {top: 66.67%; left: 33.33%; transform: scale(1);}
-  30% {top: 90%; left: 50%; transform: scale(1.2);}
-  60% {top: 0%; left: 66.67%; transform: scale(1.3);}
-  100% {top: 66.67%; left: 33.33%; transform: scale(1);}
+.background-container canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover;
+  filter: saturate(80%);
 }
 
-@keyframes green {
-  0% {top: 26.67%; right: -5%; transform: scale(1.2);}
-  30% {top: 90%; right: -5%;transform: scale(1);}
-  60% {top: 66.67%; right: 33.33%;transform: scale(1);}
-  100% {top: 0%; right: -5%; transform: scale(1.2);}
+.background-image-hidden {
+  display: none;
 }
-
-@keyframes red {
-  0% {top: 83.33%; right: 0%; transform: scale(1);}
-  30% {top: 0%; right: 50%;transform: scale(1.4);}
-  60% {top: 83.33%; right: 33.33%;transform: scale(1);}
-  100% {top: 83.33%; right: 0%; transform: scale(1);}
-}
-
-@keyframes purple {
-  0% {top: 83.33%; right: 0%; transform: scale(1.3);}
-  30% {top: 0%; right: 50%;transform: scale(1.4);}
-  60% {top: 83.33%; right: 33.33%;transform: scale(1.6);}
-  100% {top: 83.33%; right: 0%; transform: scale(1);}
-}
-
 
 /* Typing Animation */
 .typing {
-  position: relative; /* Ensure it is positioned relative to the hero-gradient */
-  z-index: 1; /* Ensure it is above the hero-gradient */
+  position: relative; /* Ensure it is positioned relative to the background */
+  z-index: 1; /* Ensure it is above the background */
   border-right: .1em solid white;
   white-space: nowrap;
   overflow: hidden;
