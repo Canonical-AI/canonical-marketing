@@ -122,7 +122,7 @@
           <!-- Right Side - Info -->
           <div class="info-panel">
             <div class="info-content">
-              <h2 class="info-title">Why thousands of teams choose Canonical</h2>
+              <h2 class="info-title">Why teams choose Canonical</h2>
               
               <div class="features-list">
                 <div class="feature-item">

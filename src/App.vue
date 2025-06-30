@@ -101,7 +101,7 @@ let animationTime = 0;
 
 const ANIMATION_CONFIG = {
   waveIntensity: 0.060,
-  timeSpeed: 0.008
+  timeSpeed: 0.002
 };
 
 // Shaders for background animation
