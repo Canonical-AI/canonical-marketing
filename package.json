@@ -19,11 +19,15 @@
     "vite": "^5.4.9"
   },
   "dependencies": {
+    "@mdi/font": "^7.4.47",
     "@mdi/js": "^7.4.47",
     "@vitejs/plugin-vue": "^5.1.4",
     "firebase": "^10.7.0",
+    "hover-effect": "^1.2.1",
     "lucide-vue-next": "^0.453.0",
     "three": "^0.178.0",
-    "vue": "^3.5.12"
+    "vue": "^3.5.12",
+    "vue-router": "^4.5.1",
+    "vuetify": "^3.9.0-beta.1"
   }
 }
