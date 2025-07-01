@@ -3,7 +3,7 @@ name: Deploy Landing Page to Production
 on:
   push:
     branches:
-      - develop
+      - main
   workflow_dispatch:
 
 
