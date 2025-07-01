@@ -173,12 +173,54 @@ firebase deploy
 
 ### Environment Variables
 
-Create a `.env` file for any environment-specific configurations:
+Create a `.env` file in the project root with your Firebase configuration:
 
 ```env
-# Add any environment variables if needed
-VITE_APP_VERSION=1.0.0
+# Firebase Configuration
+# Get these values from Firebase Console > Project Settings > General > Your apps
+VITE_FIREBASE_API_KEY=your_api_key
+VITE_FIREBASE_AUTH_DOMAIN=your_project_id.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=your_project_id
+VITE_FIREBASE_STORAGE_BUCKET=your_project_id.appspot.com
+VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+VITE_FIREBASE_APP_ID=your_app_id
+VITE_FIREBASE_MEASUREMENT_ID=your_measurement_id
+
+# Development Mode (set to 'true' to use Firebase emulators)
+VITE_USE_EMULATOR=false
+
+# Optional: reCAPTCHA (from App Check setup)
+VITE_RECAPTCHA_SITE_KEY=your_recaptcha_site_key
 ```
+
+### Firebase Authentication Setup
+
+1. **Get Firebase Configuration:**
+   - Go to [Firebase Console](https://console.firebase.google.com)
+   - Select your project (`canonical-dev-b6afd` for development)
+   - Go to Project Settings > General > Your apps
+   - Copy the config values and add them to your `.env` file
+
+2. **Enable Authentication:**
+   - In Firebase Console, go to Authentication > Sign-in method
+   - Enable Email/Password, Google, and GitHub providers
+   - For Google: Add your support email
+   - For GitHub: Configure OAuth app credentials
+
+3. **Development with Emulators (Recommended):**
+   ```bash
+   # Terminal 1: Start Firebase emulators
+   npm run emulators:fresh
+   
+   # Terminal 2: Start app in emulator mode
+   npm run dev:test
+   ```
+
+4. **Production Development:**
+   ```bash
+   # Uses real Firebase services
+   npm run dev
+   ```
 
 ### Firebase Configuration
 

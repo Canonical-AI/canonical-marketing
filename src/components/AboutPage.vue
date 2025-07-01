@@ -1,5 +1,5 @@
 <template>
-  <div class="app-root min-h-screen text-white p-4 pb-8 pt-24" style="position: relative; z-index: 10;">
+  <div class="app-root min-h-screen text-white p-4 pb-8 pt-8" style="position: relative; z-index: 10;">
     <div class="max-w-6xl mx-auto px-6 surface">
       <div class="text-center mb-12">
         <h1 class="text-5xl font-bold text-white mb-4">About Canonical</h1>
@@ -8,23 +8,23 @@
         </p>
       </div>
 
-      <div class="mb-16">
+      <div class="mb-4">
         <div class="max-w-4xl mx-auto">
           <div 
             v-for="(faq, index) in faqs" 
             :key="index"
-            class="bg-white/5 backdrop-blur-md border border-white/10 rounded-xl overflow-hidden transition-all duration-300 cursor-pointer mb-4 hover:bg-white/8 hover:border-white/20"
+            class=" border-t border-white/10 overflow-hidden transition-all duration-300 cursor-pointer mb-4 hover:bg-white/8 hover:border-white/20"
             @click="toggleFAQ(index)"
           >
-            <div class="p-6 flex justify-between items-center">
-              <h3 class="text-lg font-semibold text-white flex-1">{{ faq.question }}</h3>
-              <div class="text-2xl text-amber-400 font-bold ml-4 transition-transform duration-300">
+            <div class="p-2 flex justify-between">
+              <h3 class="text-lg font-semibold text-white flex-1 text-left">{{ faq.question }}</h3>
+              <div class="text-2xl text-amber-400 font-bold ml-4 transition-transform duration-300 text-right">
                 {{ openFAQ === index ? '−' : '+' }}
               </div>
             </div>
             <div 
               v-if="openFAQ === index" 
-              class="px-6 pb-6 text-gray-300 leading-relaxed animate-slideDown"
+              class="px-6 pb-6 text-gray-300 leading-relaxed animate-slideDown text-left"
               v-html="faq.answer"
             ></div>
           </div>
@@ -38,21 +38,31 @@
             href="https://github.com/Canonical-AI" 
             target="_blank" 
             rel="noopener noreferrer"
-            class="flex items-center gap-2 px-8 py-4 bg-white/5 backdrop-blur-md border border-white/10 rounded-full text-white font-medium transition-all duration-300 hover:bg-white/10 hover:border-white/30 hover:-translate-y-0.5 hover:text-amber-400"
+            class="flex items-center gap-2 px-8 py-4 rounded-full text-white font-medium transition-all duration-300 hover:bg-white/10 hover:border-white/30 hover:-translate-y-0.5 hover:text-amber-400"
             aria-label="GitHub"
           >
             <span class="text-2xl">🐙</span>
             <span>GitHub</span>
           </a>
           <a 
-            href="https://linkedin.com/in/johnazzinaro" 
+            href="https://www.linkedin.com/in/john-azzinaro-6a1a6b59/" 
             target="_blank" 
             rel="noopener noreferrer"
-            class="flex items-center gap-2 px-8 py-4 bg-white/5 backdrop-blur-md border border-white/10 rounded-full text-white font-medium transition-all duration-300 hover:bg-white/10 hover:border-white/30 hover:-translate-y-0.5 hover:text-amber-400"
+            class="flex items-center gap-2 px-8 py-4 rounded-full text-white font-medium transition-all duration-300 hover:bg-white/10 hover:border-white/30 hover:-translate-y-0.5 hover:text-amber-400"
             aria-label="LinkedIn"
           >
             <span class="text-2xl">💼</span>
             <span>LinkedIn</span>
+          </a>
+          <a 
+            href="mailto:team@canonic-ai.com" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            class="flex items-center gap-2 px-8 py-4  rounded-full text-white font-medium transition-all duration-300 hover:bg-white/10 hover:border-white/30 hover:-translate-y-0.5 hover:text-amber-400"
+            aria-label="Email"
+          >
+            <span class="text-2xl">📧</span>
+            <span>Email</span>
           </a>
         </div>
       </div>

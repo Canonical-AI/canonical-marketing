@@ -11,59 +11,206 @@
     <!-- App Bar -->
     <v-app-bar
       :elevation="0"
-      class="app-bar"
+      class="surface-app-bar"
       color="transparent"
       theme="dark"
       density="compact"
     >
-
       <template v-slot:prepend>
         <div class="logo-section" @click="router.push('/')">
-            <img src="/favicon.ico" alt="Canonical" class="logo-icon" />
-            <span class="logo-text">Canonical</span>
-          </div>
+          <img src="/favicon.ico" alt="Canonical" class="logo-icon" />
+          <span class="logo-text">Canonical</span>
+        </div>
       </template>
 
       <template v-slot:append>
-        <v-btn
-          v-if="$route.name === 'Home'"
-          variant="text"
-          @click="scrollToSection('features')"
-          class="reactive-btn nav-btn"
-        >
-          Features
-        </v-btn>
-        <v-btn
-          variant="text"
-          :to="{ name: 'About' }"
-          class="reactive-btn nav-btn"
-        >
-          About
-        </v-btn>
-        <v-btn
-          variant="text"
-          href="https://canonical-prod.web.app/document/7Smjq3YGDK2YW2ULrbMv?v=1.0.0"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="reactive-btn nav-btn"
-        >
-          <v-icon start>mdi-play</v-icon>
-          Demo
-        </v-btn>
-        <v-btn
-          variant="elevated"
-          color="warning"
-          :to="{ name: 'Signup' }"
-          class="signup-btn"
-        >
-          Sign Up
-        </v-btn>
+        <div class="flex items-center gap-2 md:gap-3">
+          <v-btn
+            v-if="$route.name === 'Home'"
+            variant="text"
+            @click="scrollToSection('features')"
+            class="btn-nav"
+          >
+            Features
+          </v-btn>
+          <v-btn
+            v-if="$route.name !== 'ManageAccount'"
+            variant="text"
+            :to="{ name: 'About' }"
+            class="btn-nav"
+          >
+            About
+          </v-btn>
+          <v-btn
+            v-if="$route.name !== 'ManageAccount'"
+            variant="text"
+            href="https://canonical-prod.web.app/document/7Smjq3YGDK2YW2ULrbMv?v=1.0.0"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn-nav"
+          >
+            <v-icon start>mdi-play</v-icon>
+            Demo
+          </v-btn>
+          
+          <!-- Authenticated User Menu -->
+          <template v-if="user">
+            <v-menu offset-y>
+              <template v-slot:activator="{ props }">
+                <v-btn
+                  v-bind="props"
+                  variant="text"
+                  class="user-avatar-btn"
+                  min-width="0"
+                >
+                  <v-avatar
+                    variant="tonal"
+                    size="32"
+                  >
+                    <span class="text-white font-weight-bold">
+                      {{ getInitial(user?.email) }}
+                    </span>
+                  </v-avatar>
+                </v-btn>
+              </template>
+              <v-list class="user-menu">
+                <v-list-item :to="{ name: 'ManageAccount' }" class="menu-item">
+                  <template v-slot:prepend>
+                    <v-icon>mdi-account</v-icon>
+                  </template>
+                  <v-list-item-title>Account</v-list-item-title>
+                </v-list-item>
+                <v-list-item @click="handleSignOut" class="menu-item">
+                  <template v-slot:prepend>
+                    <v-icon>mdi-logout</v-icon>
+                  </template>
+                  <v-list-item-title>Sign Out</v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
+          </template>
+          
+          <!-- Unauthenticated User Buttons -->
+          <template v-else>
+            <v-btn
+              variant="text"
+              @click="handleSignIn"
+              class="btn-signin"
+            >
+              Sign In
+            </v-btn>
+            <v-btn
+              variant="elevated"
+              color="warning"
+              :to="{ name: 'Signup' }"
+              class="text-sm font-semibold"
+            >
+              Sign Up
+            </v-btn>
+          </template>
+
+
+          <v-btn 
+            color="warning" 
+            variant="elevated"
+            @click="handleLaunchApp"
+            :loading="launchAppLoading"
+          > 
+            Launch App
+          </v-btn>
+        </div>
       </template>
     </v-app-bar>
     
     <v-main>
       <router-view />
     </v-main>
+
+    <!-- Sign In Modal -->
+    <v-dialog v-model="showSignInModal" max-width="500px" persistent>
+      <v-card class="surface-modal">
+        <v-card-title class="modal-header">
+          <span class="modal-title">Sign In</span>
+          <v-btn icon variant="text" @click="closeSignInModal" class="close-btn">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+        </v-card-title>
+        
+        <v-card-text class="modal-content">
+          <div v-if="signInError" class="error-alert">{{ signInError }}</div>
+          
+          <!-- Social Sign In Buttons -->
+          <div class="flex flex-col gap-3 mb-6">
+            <v-btn
+              @click="handleSocialSignIn('google')"
+              :loading="signInLoading"
+              block
+              variant="outlined"
+              class="btn-social google"
+            >
+              <v-icon start>mdi-google</v-icon>
+              Continue with Google
+            </v-btn>
+            
+            <v-btn
+              @click="handleSocialSignIn('github')"
+              :loading="signInLoading"
+              block
+              variant="outlined"
+              class="btn-social github"
+            >
+              <v-icon start>mdi-github</v-icon>
+              Continue with GitHub
+            </v-btn>
+          </div>
+
+          <!-- Divider -->
+          <div class="divider">
+            <div class="divider-line"></div>
+            <span class="divider-text">or continue with email</span>
+            <div class="divider-line"></div>
+          </div>
+
+          <!-- Email Sign In Form -->
+          <v-form @submit.prevent="handleEmailSignIn" class="form-field">
+            <v-text-field
+              v-model="signInEmail"
+              label="Email"
+              type="email"
+              required
+              variant="outlined"
+              class="mb-3"
+            ></v-text-field>
+            
+            <v-text-field
+              v-model="signInPassword"
+              label="Password"
+              type="password"
+              required
+              variant="outlined"
+              class="mb-4"
+            ></v-text-field>
+            
+            <v-btn
+              type="submit"
+              :loading="signInLoading"
+              block
+              color="warning"
+              variant="elevated"
+              class="font-semibold mb-6"
+            >
+              Sign In
+            </v-btn>
+          </v-form>
+
+          <!-- Footer -->
+          <div class="footer-text">
+            Don't have an account? 
+            <a @click="closeSignInModal(); $router.push('/signup')" class="footer-link">Sign up</a>
+          </div>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </v-app>
 </template>
 
@@ -80,13 +227,113 @@ import {
   TextureLoader,
   Vector2 
 } from 'three';
+import { onAuthStateChange, signOutUser, signInWithEmail, signInWithSocial, googleProvider, githubProvider, handleLaunchApp as launchApp } from './firebase.js';
 
 const router = useRouter();
+
+// Authentication state
+const user = ref(null);
+const showSignInModal = ref(false);
+const signInLoading = ref(false);
+const signInError = ref('');
+const signInEmail = ref('');
+const signInPassword = ref('');
+const launchAppLoading = ref(false);
 
 const scrollToSection = (sectionId) => {
   const element = document.getElementById(sectionId);
   if (element) {
     element.scrollIntoView({ behavior: 'smooth' });
+  }
+};
+
+const getInitial = (email) => {
+  // Get the first letter from the email
+  return email ? email.charAt(0).toUpperCase() : 'U';
+};
+
+// Auth functions
+const handleSignIn = () => {
+  showSignInModal.value = true;
+  signInError.value = '';
+};
+
+const handleEmailSignIn = async () => {
+  if (!signInEmail.value || !signInPassword.value) {
+    signInError.value = 'Please enter both email and password';
+    return;
+  }
+
+  signInLoading.value = true;
+  signInError.value = '';
+
+  try {
+    const { user: authUser, error } = await signInWithEmail(signInEmail.value, signInPassword.value);
+    
+    if (error) {
+      signInError.value = error;
+      return;
+    }
+
+    // Successfully signed in
+    showSignInModal.value = false;
+    signInEmail.value = '';
+    signInPassword.value = '';
+    router.push('/manage-account');
+  } catch (err) {
+    signInError.value = 'Failed to sign in. Please try again.';
+  } finally {
+    signInLoading.value = false;
+  }
+};
+
+const handleSocialSignIn = async (provider) => {
+  signInLoading.value = true;
+  signInError.value = '';
+
+  try {
+    const authProvider = provider === 'google' ? googleProvider : githubProvider;
+    const { user: authUser, error } = await signInWithSocial(authProvider);
+    
+    if (error) {
+      signInError.value = error;
+      return;
+    }
+
+    // Successfully signed in
+    showSignInModal.value = false;
+    router.push('/manage-account');
+  } catch (err) {
+    signInError.value = `Failed to sign in with ${provider}. Please try again.`;
+  } finally {
+    signInLoading.value = false;
+  }
+};
+
+const handleSignOut = async () => {
+  try {
+    await signOutUser();
+    router.push('/');
+  } catch (err) {
+    console.error('Sign out error:', err);
+  }
+};
+
+const closeSignInModal = () => {
+  showSignInModal.value = false;
+  signInEmail.value = '';
+  signInPassword.value = '';
+  signInError.value = '';
+};
+
+// Launch App with Authentication Handoff
+const handleLaunchApp = async () => {
+  launchAppLoading.value = true;
+  
+  try {
+    await launchApp(user.value);
+  } finally {
+    launchAppLoading.value = false;
   }
 };
 
@@ -232,6 +479,14 @@ onMounted(() => {
   window.addEventListener('resize', handleResize);
   window.addEventListener('scroll', handleParallaxScroll);
   
+  // Listen for auth state changes
+  const unsubscribe = onAuthStateChange((authUser) => {
+    user.value = authUser;
+  });
+  
+  // Store unsubscribe function for cleanup
+  window.authUnsubscribe = unsubscribe;
+  
   nextTick(() => {
     setTimeout(() => {
       const textureLoader = new TextureLoader();
@@ -256,6 +511,11 @@ onUnmounted(() => {
   
   window.removeEventListener('resize', handleResize);
   window.removeEventListener('scroll', handleParallaxScroll);
+  
+  // Clean up auth listener
+  if (window.authUnsubscribe) {
+    window.authUnsubscribe();
+  }
 });
 
 // Export transition container ref for child components to use
@@ -263,153 +523,9 @@ window.appTransitionContainer = transitionContainer;
 </script>
 
 <style>
-/* App Bar Styles */
-.app-bar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 50;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 1.5rem;
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  transition: all 0.3s ease;
-}
+/* Component-specific styles that can't be replaced */
 
-.app-bar-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  max-width: 100%;
-  padding: 0 1.5rem;
-}
-
-.app-bar-left {
-  display: flex;
-  align-items: center;
-}
-
-.logo-section {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  cursor: pointer;
-  transition: opacity 0.2s ease;
-}
-
-.logo-section:hover {
-  opacity: 0.8;
-}
-
-.logo-icon {
-  width: 2.5rem;
-  height: 2.5rem;
-}
-
-.logo-text {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: white;
-}
-
-.app-bar-right {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.nav-btn {
-  color: rgba(255, 255, 255, 0.8) !important;
-  font-size: 0.9rem;
-}
-
-.nav-btn:hover {
-  color: white !important;
-  background: rgba(255, 255, 255, 0.1) !important;
-}
-
-.signup-btn {
-  font-size: 0.9rem;
-  font-weight: 600;
-}
-
-/* Mobile app bar */
-@media (max-width: 768px) {
-
-
-  .reactive-btn {
-    font-size: 0.5rem !important;
-    margin: 0.0rem !important;
-    padding: 0.0rem !important;
-  }
-
-
-  .app-bar-content {
-    flex-direction: column;
-    gap: 0.75rem;
-    padding: 0.75rem 1rem;
-  }
-  
-  .app-bar-right {
-    gap: 0.5rem;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-  
-  .nav-btn {
-    font-size: 0.8rem;
-  }
-  
-  .signup-btn {
-    font-size: 0.8rem;
-  }
-  
-  .logo-text {
-    font-size: 1.1rem;
-  }
-  
-  .logo-icon {
-    width: 2rem;
-    height: 2rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .app-bar-content {
-    padding: 0.5rem 0.75rem;
-  }
-  
-  .app-bar-right {
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-}
-
-/* Global styles that apply to all pages */
-#app::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: url('/grain.png') repeat;
-  opacity: 0.07;
-  pointer-events: none;
-  z-index: 1;
-}
-
-#app {
-  position: relative;
-  min-height: 100vh;
-}
-
-/* WebGL Background */
+/* WebGL Background - unique to this component */
 .background-container {
   position: fixed;
   top: -20%;
@@ -434,7 +550,7 @@ window.appTransitionContainer = transitionContainer;
   display: none;
 }
 
-/* Transition container for hover effects */
+/* Transition container for hover effects - unique to this component */
 .transition-container {
   position: fixed;
   top: 0;
@@ -450,6 +566,72 @@ window.appTransitionContainer = transitionContainer;
 .transition-container.active {
   opacity: 1;
   pointer-events: all;
+}
+
+/* App specific overrides */
+#app {
+  position: relative;
+  min-height: 100vh;
+}
+
+/* Mobile responsive adjustments for Vuetify buttons */
+@media (max-width: 768px) {
+  .v-btn.btn-nav {
+    font-size: 0.75rem !important;
+    min-width: auto !important;
+    padding: 0.25rem 0.5rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .v-btn.btn-nav {
+    font-size: 0.7rem !important;
+    padding: 0.2rem 0.4rem !important;
+  }
+}
+
+/* User Avatar Button */
+.user-avatar-btn {
+  padding: 0.25rem !important;
+  min-width: auto !important;
+}
+
+.user-avatar-small {
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+/* User Menu */
+.user-menu {
+  background: rgba(30, 30, 30, 0.95) !important;
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.5rem;
+  min-width: 150px;
+}
+
+.user-menu .menu-item {
+  color: white !important;
+  transition: background-color 0.2s ease;
+}
+
+.user-menu .menu-item:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+}
+
+.user-menu .v-list-item-title {
+  color: white !important;
+}
+
+.user-menu .v-icon {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+@media (max-width: 768px) {
+  .user-avatar-small {
+    width: 32px !important;
+    height: 32px !important;
+    font-size: 0.875rem;
+  }
 }
 </style>
 

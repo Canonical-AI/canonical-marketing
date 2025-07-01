@@ -51,11 +51,232 @@
   --circle-size: 70%;
   --blending: hard-light;
 
+  /* Common color values as CSS custom properties */
+  --glass-bg: rgba(133, 133, 255, 0.1);
+  --glass-border: rgba(255, 255, 255, 0.9);
+  --glass-border-light: rgba(255, 255, 255, 0.2);
+  --glass-border-medium: rgba(255, 255, 255, 0.3);
+  --app-bar-bg: rgba(255, 255, 255, 0.05);
+  --text-white-70: rgba(255, 255, 255, 0.7);
+  --text-white-80: rgba(255, 255, 255, 0.8);
+  --text-white-90: rgba(255, 255, 255, 0.9);
+  --hover-bg-light: rgba(255, 255, 255, 0.1);
+  --hover-bg-extra-light: rgba(255, 255, 255, 0.05);
+  --error-bg: rgba(239, 68, 68, 0.1);
+  --error-border: rgba(239, 68, 68, 0.3);
 }
 
 #app {
   margin: 0 auto;
   padding: 0 auto;
   text-align: center;
+}
+
+/* Global grain overlay */
+#app::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('/grain.png') repeat;
+  opacity: 0.07;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Reusable surface classes */
+@layer components {
+  /* Glassmorphism surface - main variant */
+  .surface-glass {
+    @apply bg-opacity-10 backdrop-blur-2xl border border-opacity-90 border-white text-white;
+    background: var(--glass-bg);
+    border-color: var(--glass-border);
+  }
+
+  /* Glassmorphism surface - subtle variant */
+  .surface-glass-subtle {
+    @apply backdrop-blur-2xl border text-white;
+    background: var(--app-bar-bg);
+    border-color: var(--glass-border-light);
+  }
+
+  /* App bar surface */
+  .surface-app-bar {
+    @apply fixed top-0 left-0 right-0 z-50 backdrop-blur-2xl border-b transition-all duration-300;
+    background: var(--app-bar-bg);
+    border-color: var(--glass-border-light);
+  }
+
+  /* Modal surface */
+  .surface-modal {
+    @apply surface-glass rounded-2xl;
+  }
+
+  /* Button variants */
+  .btn-nav {
+    @apply text-sm font-medium transition-all duration-200;
+    color: var(--text-white-80);
+  }
+  
+  .btn-nav:hover {
+    @apply text-white;
+    background: var(--hover-bg-light);
+  }
+
+  .btn-signin {
+    @apply btn-nav border font-medium;
+    color: var(--text-white-90);
+    border-color: var(--glass-border-light);
+  }
+
+  .btn-signin:hover {
+    border-color: var(--glass-border-medium);
+  }
+
+  .btn-social {
+    @apply text-white font-medium border transition-all duration-200;
+    border-color: var(--glass-border-light);
+  }
+
+  .btn-social:hover {
+    background: var(--hover-bg-extra-light);
+  }
+
+  .btn-social.google:hover {
+    @apply border-blue-500;
+    background: rgba(66, 133, 244, 0.1);
+  }
+
+  .btn-social.github:hover {
+    @apply border-gray-700;
+    background: rgba(51, 51, 51, 0.1);
+  }
+
+  /* Logo section */
+  .logo-section {
+    @apply flex items-center gap-2 cursor-pointer transition-opacity duration-200 hover:opacity-80;
+  }
+
+  .logo-icon {
+    @apply w-10 h-10;
+  }
+
+  .logo-text {
+    @apply text-xl font-semibold text-white;
+  }
+
+  /* Modal styles */
+  .modal-header {
+    @apply flex justify-between items-center p-6 border-b;
+    border-color: var(--glass-border-light);
+  }
+
+  .modal-title {
+    @apply text-2xl font-semibold text-white;
+  }
+
+  .modal-content {
+    @apply p-8;
+  }
+
+  .close-btn {
+    @apply transition-all duration-200;
+    color: var(--text-white-70);
+  }
+
+  .close-btn:hover {
+    @apply text-white;
+    background: var(--hover-bg-light);
+  }
+
+  /* Error alert */
+  .error-alert {
+    @apply rounded-lg p-3 mb-6 text-sm border;
+    background: var(--error-bg);
+    border-color: var(--error-border);
+    color: #fca5a5;
+  }
+
+  /* Divider */
+  .divider {
+    @apply flex items-center my-6;
+  }
+
+  .divider-line {
+    @apply flex-1 h-px;
+    background: var(--glass-border-light);
+  }
+
+  .divider-text {
+    @apply px-4 text-sm;
+    color: var(--text-white-70);
+  }
+
+  /* Footer text */
+  .footer-text {
+    @apply text-center text-sm;
+    color: var(--text-white-70);
+  }
+
+  .footer-link {
+    @apply text-amber-500 font-medium cursor-pointer hover:text-amber-600 hover:underline;
+  }
+
+  /* Form field overrides for dark theme */
+  .form-field .v-field {
+    background: var(--hover-bg-extra-light) !important;
+    border-color: var(--glass-border-light) !important;
+  }
+
+  .form-field .v-field--focused {
+    border-color: #f59e0b !important;
+  }
+
+  .form-field .v-field__input {
+    color: white !important;
+  }
+
+  .form-field .v-field__outline {
+    color: var(--glass-border-medium) !important;
+  }
+
+  .form-field .v-field--focused .v-field__outline {
+    color: #f59e0b !important;
+  }
+
+  .form-field .v-label {
+    color: var(--text-white-70) !important;
+  }
+
+  .form-field .v-field--focused .v-label {
+    color: #f59e0b !important;
+  }
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+  .btn-nav {
+    @apply text-xs px-2 py-1;
+  }
+  
+  .logo-text {
+    @apply text-lg;
+  }
+  
+  .logo-icon {
+    @apply w-8 h-8;
+  }
+}
+
+@media (max-width: 480px) {
+  .modal-content {
+    @apply p-4;
+  }
+  
+  .modal-header {
+    @apply p-4;
+  }
 }
 

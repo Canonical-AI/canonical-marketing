@@ -168,6 +168,7 @@
         <a href="https://github.com/Canonical-AI/.github/blob/main/Privacy.md" target="_blank" rel="noopener noreferrer" class="footer-link">Privacy</a>
         <a href="https://github.com/Canonical-AI/.github/blob/main/Terms.md" target="_blank" rel="noopener noreferrer" class="footer-link">Terms</a>
         <span class="footer-copyright">&copy; 2025 Canonical-ai.com</span>
+        <a href="mailto:team@canonic-ai.com" class="text-on-surface-variant hover:text-primary transition-colors">team@canonic-ai.com</a>
       </div>
     </div>
   </div>
@@ -177,6 +178,7 @@
 import { ref, onMounted, onUnmounted, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import hoverEffect from 'hover-effect';
+import { signUpWithEmail, signInWithSocial, googleProvider, githubProvider } from '../firebase.js';
 
 export default {
   name: 'SignupPage',
@@ -273,14 +275,17 @@ export default {
       createTransitionEffect();
       
       try {
-        // TODO: Implement Firebase Auth signup
-        console.log('Email signup attempt:', signupEmail.value);
+        const { user, error: authError } = await signUpWithEmail(signupEmail.value, signupPassword.value);
         
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        if (authError) {
+          error.value = authError;
+          return;
+        }
         
-        // Redirect to main app with signup indication
-        window.location.href = `https://canonical-prod.web.app?signup=true&email=${encodeURIComponent(signupEmail.value)}`;
+        // Successfully created account - redirect to main app with user info
+        // Use canonical-prod.web.app for production, canonical-dev.web.app for development
+        const targetApp = import.meta.env.PROD ? 'https://canonical-prod.web.app' : 'https://canonical-dev.web.app';
+        window.location.href = `${targetApp}?signup=true&uid=${user.uid}&email=${encodeURIComponent(user.email)}`;
         
       } catch (err) {
         console.error('Signup error:', err);
@@ -298,14 +303,17 @@ export default {
       createTransitionEffect();
       
       try {
-        // TODO: Implement social auth
-        console.log(`${provider} signup clicked`);
+        const authProvider = provider === 'google' ? googleProvider : githubProvider;
+        const { user, error: authError } = await signInWithSocial(authProvider);
         
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 1500));
+        if (authError) {
+          error.value = authError;
+          return;
+        }
         
-        // Redirect to main app
-        window.location.href = `https://canonical-prod.web.app?signup=true&provider=${provider}`;
+        // Successfully signed up with social - redirect to main app
+        const targetApp = import.meta.env.PROD ? 'https://canonical-prod.web.app' : 'https://canonical-dev.web.app';
+        window.location.href = `${targetApp}?signup=true&uid=${user.uid}&email=${encodeURIComponent(user.email)}&provider=${provider}`;
         
       } catch (err) {
         console.error('Social signup error:', err);

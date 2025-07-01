@@ -5,11 +5,10 @@
       <div class="hero-overlay">
         <div class="hero-content">
           <div class="md:text-2xl lg:text-6xl font-bold mb-4 text-white">
-            Engineering Discipline for Product Work
+            The AI for Product
           </div>
           <div class="md:text-lg lg:text-xl text-white/80 mb-8 max-w-2xl mx-auto">
-            Bring commits, versioning, and collaboration to product artifacts. 
-            Built by product people, for product people.
+            Communicate effortlessly
           </div>
           <div class="md:text-lg lg:text-2xl typing mb-8 text-warning">> {{ currentPhrase }}</div>
           <div class="space-y-4">
@@ -293,6 +292,7 @@
       <a href="https://github.com/Canonical-AI/.github/blob/main/Privacy.md" target="_blank" rel="noopener noreferrer" class="text-on-surface-variant hover:text-primary transition-colors">privacy</a>
       <a href="https://github.com/Canonical-AI/.github/blob/main/Terms.md" target="_blank" rel="noopener noreferrer" class="text-on-surface-variant hover:text-primary transition-colors">terms</a>
       <p class="text-on-surface-variant"> &copy; 2025 Canonical-ai.com </p>
+      <a href="mailto:team@canonic-ai.com" class="text-on-surface-variant hover:text-primary transition-colors">team@canonic-ai.com</a>
     </div>
 
   </div>
@@ -302,12 +302,11 @@
 import { ref, onMounted } from 'vue';
 
 const phrases = ref([
-  'The AI for Product.',  
-  'Build Artifacts.',
+  'Build Product Artifacts.',
   'Craft your Canon.',
-  'Unbound Development.',
+  'Unblock Development.',
   'Embrace #founder-mode.',
-  'Co-pilot for Product.',
+  'Co-pilot for Strategy.',
 ]);
 
 const currentPhrase = ref('');
@@ -359,15 +358,7 @@ onMounted(() => {
   justify-content: center;
 }
 
-.hero-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.1);
-  z-index: 2;
-}
+
 
 .hero-content {
   position: relative;
