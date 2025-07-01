@@ -14,7 +14,7 @@
           <div class="space-y-4">
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
               <router-link to="/signup" class="inline-block bg-warning md:text-lg lg:text-xl text-white px-8 py-3 rounded-full hover:bg-primary-darken-1 transition-colors shadow-lg">
-                Get Started Free 🚀
+                Get Started Free <v-icon>mdi-rocket-launch</v-icon>
               </router-link>
               <a href="https://canonical-prod.web.app/document/7Smjq3YGDK2YW2ULrbMv?v=1.0.0" target="_blank" rel="noopener noreferrer" class="inline-block border-2 border-white text-white md:text-lg lg:text-xl px-8 py-3 rounded-full hover:bg-white hover:text-surface transition-colors shadow-lg">
                 Try Demo
