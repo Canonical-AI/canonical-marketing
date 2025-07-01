@@ -30,7 +30,7 @@ const firebaseConfig = {
   measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
 };
 
-console.log('🔧 Firebase config:', firebaseConfig);
+
 
 // Validation
 if (!firebaseConfig.apiKey || firebaseConfig.apiKey === 'your_api_key_here') {

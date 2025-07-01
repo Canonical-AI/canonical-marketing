@@ -23,8 +23,9 @@
         </div>
       </template>
 
-      <template v-slot:append>
-        <div class="flex items-center gap-2 md:gap-3">
+      <!-- Desktop Navigation - Center of entire app bar -->
+      <div class="desktop-nav">
+        <div class="nav-center">
           <v-btn
             v-if="$route.name === 'Home'"
             variant="text"
@@ -43,8 +44,9 @@
           </v-btn>
           <v-btn
             v-if="$route.name !== 'ManageAccount'"
-            variant="text"
-            href="https://canonical-prod.web.app/document/7Smjq3YGDK2YW2ULrbMv?v=1.0.0"
+            variant="tonal"
+            color="primary"
+            href="https://canonical-prod.web.app/demo"
             target="_blank"
             rel="noopener noreferrer"
             class="btn-nav"
@@ -52,7 +54,20 @@
             <v-icon start>mdi-play</v-icon>
             Demo
           </v-btn>
-          
+        </div>
+      </div>
+
+      <template v-slot:append>
+        <!-- Mobile Hamburger Menu -->
+        <v-btn
+          icon="mdi-menu"
+          variant="text"
+          @click="mobileMenuOpen = !mobileMenuOpen"
+          class="mobile-hamburger"
+        ></v-btn>
+
+        <!-- Desktop User Menu & Actions -->
+        <div class="desktop-user-actions">
           <!-- Authenticated User Menu -->
           <template v-if="user">
             <v-menu offset-y>
@@ -93,15 +108,16 @@
           <!-- Unauthenticated User Buttons -->
           <template v-else>
             <v-btn
+              icon="mdi-login"
               variant="text"
               @click="handleSignIn"
               class="btn-signin"
             >
-              Sign In
+              
             </v-btn>
             <v-btn
               variant="elevated"
-              color="warning"
+              color="success"
               :to="{ name: 'Signup' }"
               class="text-sm font-semibold"
             >
@@ -109,14 +125,14 @@
             </v-btn>
           </template>
 
-
           <v-btn 
             color="warning" 
+            class="mx-2"
             variant="elevated"
             @click="handleLaunchApp"
             :loading="launchAppLoading"
           > 
-            Launch App
+            Launch <v-icon>mdi-rocket-launch</v-icon>
           </v-btn>
         </div>
       </template>
@@ -211,6 +227,116 @@
         </v-card-text>
       </v-card>
     </v-dialog>
+
+    <!-- Mobile Navigation Drawer -->
+    <v-navigation-drawer
+      v-model="mobileMenuOpen"
+      temporary
+      location="right"
+      class="mobile-nav-drawer"
+      theme="dark"
+    >
+      <v-list class="mobile-nav-list">
+        <!-- Navigation Items -->
+        <v-list-item
+          v-if="$route.name === 'Home'"
+          @click="scrollToSection('features'); mobileMenuOpen = false"
+          class="mobile-nav-item"
+        >
+          <template v-slot:prepend>
+            <v-icon>mdi-star</v-icon>
+          </template>
+          <v-list-item-title>Features</v-list-item-title>
+        </v-list-item>
+
+        <v-list-item
+          v-if="$route.name !== 'ManageAccount'"
+          :to="{ name: 'About' }"
+          @click="mobileMenuOpen = false"
+          class="mobile-nav-item"
+        >
+          <template v-slot:prepend>
+            <v-icon>mdi-information</v-icon>
+          </template>
+          <v-list-item-title>About</v-list-item-title>
+        </v-list-item>
+
+        <v-list-item
+          v-if="$route.name !== 'ManageAccount'"
+          href="https://canonical-prod.web.app/demo"
+          target="_blank"
+          rel="noopener noreferrer"
+          @click="mobileMenuOpen = false"
+          class="mobile-nav-item"
+        >
+          <template v-slot:prepend>
+            <v-icon>mdi-play</v-icon>
+          </template>
+          <v-list-item-title>Demo</v-list-item-title>
+        </v-list-item>
+
+        <v-divider class="my-2"></v-divider>
+
+        <!-- User Actions -->
+        <template v-if="user">
+          <v-list-item
+            :to="{ name: 'ManageAccount' }"
+            @click="mobileMenuOpen = false"
+            class="mobile-nav-item"
+          >
+            <template v-slot:prepend>
+              <v-icon>mdi-account</v-icon>
+            </template>
+            <v-list-item-title>Account</v-list-item-title>
+          </v-list-item>
+
+          <v-list-item
+            @click="handleSignOut; mobileMenuOpen = false"
+            class="mobile-nav-item"
+          >
+            <template v-slot:prepend>
+              <v-icon>mdi-logout</v-icon>
+            </template>
+            <v-list-item-title>Sign Out</v-list-item-title>
+          </v-list-item>
+        </template>
+
+        <template v-else>
+          <v-list-item
+            @click="handleSignIn; mobileMenuOpen = false"
+            class="mobile-nav-item"
+          >
+            <template v-slot:prepend>
+              <v-icon>mdi-login</v-icon>
+            </template>
+            <v-list-item-title>Sign In</v-list-item-title>
+          </v-list-item>
+
+          <v-list-item
+            :to="{ name: 'Signup' }"
+            @click="mobileMenuOpen = false"
+            class="mobile-nav-item"
+          >
+            <template v-slot:prepend>
+              <v-icon>mdi-account-plus</v-icon>
+            </template>
+            <v-list-item-title>Sign Up</v-list-item-title>
+          </v-list-item>
+        </template>
+
+        <v-divider class="my-2"></v-divider>
+
+        <v-list-item
+          @click="handleLaunchApp; mobileMenuOpen = false"
+          class="mobile-nav-item launch-item"
+        >
+          <template v-slot:prepend>
+            <v-icon color="warning">mdi-rocket-launch</v-icon>
+          </template>
+          <v-list-item-title class="text-warning font-weight-bold">Launch App</v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </v-navigation-drawer>
   </v-app>
 </template>
 
@@ -239,6 +365,7 @@ const signInError = ref('');
 const signInEmail = ref('');
 const signInPassword = ref('');
 const launchAppLoading = ref(false);
+const mobileMenuOpen = ref(false);
 
 const scrollToSection = (sectionId) => {
   const element = document.getElementById(sectionId);
@@ -534,7 +661,7 @@ window.appTransitionContainer = transitionContainer;
   height: 150%;
   z-index: 0;
   overflow: hidden;
-  filter: blur(15px);
+  filter: blur(15px) brightness(0.8);
   will-change: transform;
 }
 
@@ -574,19 +701,84 @@ window.appTransitionContainer = transitionContainer;
   min-height: 100vh;
 }
 
-/* Mobile responsive adjustments for Vuetify buttons */
-@media (max-width: 768px) {
-  .v-btn.btn-nav {
-    font-size: 0.75rem !important;
-    min-width: auto !important;
-    padding: 0.25rem 0.5rem !important;
-  }
+/* Desktop Navigation - Center of entire app bar */
+.desktop-nav {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
 }
 
-@media (max-width: 480px) {
-  .v-btn.btn-nav {
-    font-size: 0.7rem !important;
-    padding: 0.2rem 0.4rem !important;
+.nav-center {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.desktop-user-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Mobile Navigation */
+.mobile-hamburger {
+  display: none !important;
+}
+
+/* Mobile Navigation Drawer */
+.mobile-nav-drawer {
+  background: rgba(30, 30, 30, 0.98) !important;
+  backdrop-filter: blur(20px);
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.mobile-nav-list {
+  padding: 1rem 0;
+}
+
+.mobile-nav-item {
+  color: white !important;
+  margin: 0.25rem 0.75rem;
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.mobile-nav-item:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+}
+
+.mobile-nav-item .v-list-item-title {
+  color: white !important;
+  font-weight: 500;
+}
+
+.mobile-nav-item .v-icon {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.mobile-nav-item.launch-item {
+  background: rgba(255, 193, 7, 0.1) !important;
+  border: 1px solid rgba(255, 193, 7, 0.3);
+}
+
+.mobile-nav-item.launch-item:hover {
+  background: rgba(255, 193, 7, 0.2) !important;
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 768px) {
+  .desktop-nav {
+    display: none;
+  }
+  
+  .desktop-user-actions {
+    display: none;
+  }
+  
+  .mobile-hamburger {
+    display: flex !important;
   }
 }
 
@@ -624,14 +816,6 @@ window.appTransitionContainer = transitionContainer;
 
 .user-menu .v-icon {
   color: rgba(255, 255, 255, 0.7) !important;
-}
-
-@media (max-width: 768px) {
-  .user-avatar-small {
-    width: 32px !important;
-    height: 32px !important;
-    font-size: 0.875rem;
-  }
 }
 </style>
 
