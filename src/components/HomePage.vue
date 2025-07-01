@@ -1,16 +1,16 @@
 <template>
-  <div class="app-root">
+  <div class="relative overflow-x-hidden min-h-screen">
     <!-- Hero Section (no parallax component, works with WebGL background from App.vue) -->
-    <section class="hero-section">
+    <section class="relative h-[90vh] flex items-center justify-center">
       <div class="hero-overlay">
-        <div class="hero-content">
+        <div class="relative z-10 pt-20 flex flex-col items-center justify-center text-white text-center max-w-4xl mx-auto px-4">
           <div class="lg:text-6xl text-4xl font-bold mb-4 text-white">
             The AI for Product
           </div>
           <div class="md:text-lg lg:text-xl text-white/80 mb-8 max-w-2xl mx-auto">
             Empower your team to build the best products for your customers
           </div>
-          <div class="md:text-lg lg:text-2xl typing mb-8 text-warning">> {{ currentPhrase }}</div>
+          <div class="md:text-lg lg:text-2xl typing mb-8 text-warning font-semibold border-r-2 border-warning animate-pulse">> {{ currentPhrase }}</div>
           <div class="space-y-4">
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
               <router-link to="/signup" class="inline-block bg-warning md:text-lg lg:text-xl text-white px-8 py-3 rounded-full hover:bg-primary-darken-1 transition-colors shadow-lg">
@@ -27,7 +27,7 @@
     </section>
 
     <!-- Main Content -->
-    <div class="main-content bg-surface text-on-surface-variant">
+    <div class="surface-glass text-white/80 relative z-20 border-0 border-on-surface-variant">
       
       <!-- Problem Statement Section -->
       <section class="py-20 px-6">
@@ -62,7 +62,7 @@
       </section>
 
       <!-- Solution Overview Section -->
-      <section class="py-12 px-6 bg-surface-variant">
+      <section class="py-12 px-6 surface-glass-dark">
         <div class="container mx-auto max-w-7xl">
           <div class="grid lg:grid-cols-5 gap-12 items-center">
             <!-- Left Column - Text Content -->
@@ -70,7 +70,7 @@
               <h2 class="text-3xl lg:text-4xl font-bold mb-8 text-white">
                 Meet Canonical: Where Product Strategy Meets Execution
               </h2>
-              <p class="text-xl mb-8 text-on-surface-variant">
+              <p class="text-xl mb-8 text-white/70">
                 Organize your product artifacts to keep stakeholders coordinated, developers building the right thing, 
                 and product strategy on track. Built on best practices from product thought leaders.
               </p>
@@ -97,11 +97,11 @@
           <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             
             <!-- Feature 1: Organized Artifacts -->
-            <div class="feature-card bg-surface-light p-6 rounded-lg">
+            <div class="surface-glass-subtle rounded-lg p-6 transition-transform duration-300 hover:scale-105 hover:shadow-xl">
               <div class="text-warning text-3xl mb-4">📋</div>
               <h3 class="text-xl font-semibold mb-3 text-white">Organized Product Artifacts</h3>
-              <p class="text-on-surface-variant mb-4">Create and organize PRDs, user stories, specs, and roadmaps in one place. Keep your product strategy clear and accessible.</p>
-              <ul class="text-sm space-y-1 text-on-surface-variant/80 text-left">
+              <p class="text-white/70 mb-4">Create and organize PRDs, user stories, specs, and roadmaps in one place. Keep your product strategy clear and accessible.</p>
+              <ul class="text-sm space-y-1 text-white/60 text-left">
                 <li>• Unified artifact management</li>
                 <li>• Clear information hierarchy</li>
                 <li>• Easy search and discovery</li>
@@ -110,11 +110,11 @@
             </div>
 
             <!-- Feature 2: Stakeholder Alignment -->
-            <div class="feature-card bg-surface-light p-6 rounded-lg">
+            <div class="surface-glass-subtle rounded-lg p-6 transition-transform duration-300 hover:scale-105 hover:shadow-xl">
               <div class="text-warning text-3xl mb-4">👥</div>
               <h3 class="text-xl font-semibold mb-3 text-white">Stakeholder Alignment</h3>
-              <p class="text-on-surface-variant mb-4">Keep everyone on the same page with clear communication tools and shared visibility into product decisions.</p>
-              <ul class="text-sm space-y-1 text-on-surface-variant/80 text-left">
+              <p class="text-white/70 mb-4">Keep everyone on the same page with clear communication tools and shared visibility into product decisions.</p>
+              <ul class="text-sm space-y-1 text-white/60 text-left">
                 <li>• Shared product visibility</li>
                 <li>• Comment and feedback loops</li>
                 <li>• Decision documentation</li>
@@ -123,11 +123,11 @@
             </div>
 
             <!-- Feature 3: Writing Culture -->
-            <div class="feature-card bg-surface-light p-6 rounded-lg">
+            <div class="surface-glass-subtle rounded-lg p-6 transition-transform duration-300 hover:scale-105 hover:shadow-xl">
               <div class="text-warning text-3xl mb-4">✍️</div>
               <h3 class="text-xl font-semibold mb-3 text-white">Enable Writing Culture</h3>
-              <p class="text-on-surface-variant mb-4">Foster clear thinking through structured writing. Document decisions, rationale, and strategy that guides development.</p>
-              <ul class="text-sm space-y-1 text-on-surface-variant/80 text-left">
+              <p class="text-white/70 mb-4">Foster clear thinking through structured writing. Document decisions, rationale, and strategy that guides development.</p>
+              <ul class="text-sm space-y-1 text-white/60 text-left">
                 <li>• Structured thinking frameworks</li>
                 <li>• Decision documentation</li>
                 <li>• Strategy articulation</li>
@@ -136,11 +136,11 @@
             </div>
 
             <!-- Feature 4: Template Library -->
-            <div class="feature-card bg-surface-light p-6 rounded-lg">
+            <div class="surface-glass-subtle rounded-lg p-6 transition-transform duration-300 hover:scale-105 hover:shadow-xl">
               <div class="text-warning text-3xl mb-4">📚</div>
               <h3 class="text-xl font-semibold mb-3 text-white">Best Practice Templates</h3>
-              <p class="text-on-surface-variant mb-4">Built on frameworks from product thought leaders like Marty Cagan, Melissa Perri, and Rob Fitzpatrick. Start with proven structures.</p>
-              <ul class="text-sm space-y-1 text-on-surface-variant/80 text-left">
+              <p class="text-white/70 mb-4">Built on frameworks from product thought leaders like Marty Cagan, Melissa Perri, and Rob Fitzpatrick. Start with proven structures.</p>
+              <ul class="text-sm space-y-1 text-white/60 text-left">
                 <li>• Thought leader frameworks</li>
                 <li>• PRD and spec templates</li>
                 <li>• Custom team standards</li>
@@ -149,11 +149,11 @@
             </div>
 
             <!-- Feature 5: AI-Powered Insights -->
-            <div class="feature-card bg-surface-light p-6 rounded-lg">
+            <div class="surface-glass-subtle rounded-lg p-6 transition-transform duration-300 hover:scale-105 hover:shadow-xl">
               <div class="text-warning text-3xl mb-4">🤖</div>
               <h3 class="text-xl font-semibold mb-3 text-white">Product-Focused AI</h3>
-              <p class="text-on-surface-variant mb-4">Specialized AI trained on product management best practices to help you create better artifacts and make better decisions.</p>
-              <ul class="text-sm space-y-1 text-on-surface-variant/80 text-left">
+              <p class="text-white/70 mb-4">Specialized AI trained on product management best practices to help you create better artifacts and make better decisions.</p>
+              <ul class="text-sm space-y-1 text-white/60 text-left">
                 <li>• Product management insights</li>
                 <li>• Content improvement suggestions</li>
                 <li>• Strategy guidance</li>
@@ -162,11 +162,11 @@
             </div>
 
             <!-- Feature 6: Integration Ecosystem -->
-            <div class="feature-card bg-surface-light p-6 rounded-lg">
+            <div class="surface-glass-subtle rounded-lg p-6 transition-transform duration-300 hover:scale-105 hover:shadow-xl">
               <div class="text-warning text-3xl mb-4">⚡</div>
               <h3 class="text-xl font-semibold mb-3 text-white">Seamless Team Workflows</h3>
-              <p class="text-on-surface-variant mb-4">Connect with your existing tools to reduce context switching and keep your team focused on building great products.</p>
-              <ul class="text-sm space-y-1 text-on-surface-variant/80 text-left">
+              <p class="text-white/70 mb-4">Connect with your existing tools to reduce context switching and keep your team focused on building great products.</p>
+              <ul class="text-sm space-y-1 text-white/60 text-left">
                 <li>• Design tool sync</li>
                 <li>• Development integration</li>
                 <li>• Communication channels</li>
@@ -180,21 +180,21 @@
 
 
       <!-- Social Proof Section -->
-      <section class="py-20 px-6 bg-surface-variant">
+      <section class="py-20 px-6 surface-glass-dark">
         <div class="container mx-auto max-w-4xl text-center">
           <h2 class="text-3xl lg:text-4xl font-bold mb-12 text-white">
             Built by Product People, For Product People
           </h2>
           
-          <div class="bg-surface p-8 rounded-lg mb-12">
+          <div class="surface-glass p-8 rounded-lg mb-12">
             <div class="flex items-center justify-center mb-4">
               <img src="/canonical-logo.svg" alt="Canonical" class="w-12 h-12 mr-4" />
               <div class="text-left">
                 <p class="text-white font-semibold">John Azzinaro</p>
-                <p class="text-on-surface-variant text-sm">Ex-AWS Technical Product Manager • 5+ years PM experience</p>
+                <p class="text-white/70 text-sm">Ex-AWS Technical Product Manager • 5+ years PM experience</p>
               </div>
             </div>
-            <blockquote class="text-lg italic text-on-surface-variant">
+            <blockquote class="text-lg italic text-white/70">
               "Having been both an engineer and a product manager, I've seen how organized thinking and clear artifacts transform product outcomes. Canonical brings that discipline to product work."
             </blockquote>
           </div>
@@ -202,15 +202,15 @@
           <div class="grid md:grid-cols-3 gap-6 text-center">
             <div>
               <div class="text-3xl font-bold text-warning">Product-First</div>
-              <div class="text-on-surface-variant">Built for PM Workflows</div>
+              <div class="text-white/70">Built for PM Workflows</div>
             </div>
             <div>
               <div class="text-3xl font-bold text-warning">Best Practices</div>
-              <div class="text-on-surface-variant">Thought Leader Inspired</div>
+              <div class="text-white/70">Thought Leader Inspired</div>
             </div>
             <div>
               <div class="text-3xl font-bold text-warning">Open Source</div>
-              <div class="text-on-surface-variant">Built for everyone</div>
+              <div class="text-white/70">Built for everyone</div>
             </div>
           </div>
         </div>
@@ -222,7 +222,7 @@
           <h2 class="text-3xl lg:text-4xl font-bold mb-8 text-white">
             Ready to Build Better Products?
           </h2>
-          <p class="text-xl mb-12 text-on-surface-variant max-w-2xl mx-auto">
+          <p class="text-xl mb-12 text-white/70 max-w-2xl mx-auto">
             Join the beta and transform how your team creates, organizes, and collaborates on product artifacts. 
             No credit card required, 5-minute setup.
           </p>
@@ -232,13 +232,12 @@
               <router-link to="/signup" class="inline-block bg-warning text-white px-8 py-4 rounded-full hover:bg-primary-darken-1 transition-colors text-xl shadow-lg">
                 Transform Your Product Work 🚀
               </router-link>
-              <a href="https://canonical-prod.web.app/document/7Smjq3YGDK2YW2ULrbMv?v=1.0.0" target="_blank" rel="noopener noreferrer" class="inline-block border-2 border-on-surface-variant text-on-surface-variant px-8 py-4 rounded-full hover:bg-on-surface-variant hover:text-surface transition-colors text-xl shadow-lg">
+              <a href="https://canonical-prod.web.app/document/7Smjq3YGDK2YW2ULrbMv?v=1.0.0" target="_blank" rel="noopener noreferrer" class="inline-block border-2 border-white/70 text-white/70 px-8 py-4 rounded-full hover:bg-white/70 hover:text-surface transition-colors text-xl shadow-lg">
                 Try Demo First
               </a>
             </div>
             
-            <div class="flex justify-center space-x-8 text-sm text-on-surface-variant">
-
+            <div class="flex justify-center space-x-8 text-sm text-white/70">
               <div class="flex items-center">
                 <span class="text-success mr-2">✓</span>
                 No Credit Card
@@ -254,11 +253,11 @@
 
     </div>
 
-    <div class="hero-footer fixed bottom-0 left-0 right-0 flex justify-center items-center p-2 space-x-4 bg-surface/80 backdrop-blur-sm">
-      <a href="https://github.com/Canonical-AI/.github/blob/main/Privacy.md" target="_blank" rel="noopener noreferrer" class="text-on-surface-variant hover:text-primary transition-colors">privacy</a>
-      <a href="https://github.com/Canonical-AI/.github/blob/main/Terms.md" target="_blank" rel="noopener noreferrer" class="text-on-surface-variant hover:text-primary transition-colors">terms</a>
-      <p class="text-on-surface-variant"> &copy; 2025 Canonical-ai.com </p>
-      <a href="mailto:team@canonic-ai.com" class="text-on-surface-variant hover:text-primary transition-colors">team@canonic-ai.com</a>
+    <div class="fixed bottom-0 left-0 right-0 flex justify-center items-center p-2 space-x-4 bg-surface/80 backdrop-blur-sm z-50">
+      <a href="https://github.com/Canonical-AI/.github/blob/main/Privacy.md" target="_blank" rel="noopener noreferrer" class="text-white/70 hover:text-primary transition-colors">privacy</a>
+      <a href="https://github.com/Canonical-AI/.github/blob/main/Terms.md" target="_blank" rel="noopener noreferrer" class="text-white/70 hover:text-primary transition-colors">terms</a>
+      <p class="text-white/70"> &copy; 2025 Canonical-ai.com </p>
+      <a href="mailto:team@canonic-ai.com" class="text-white/70 hover:text-primary transition-colors">team@canonic-ai.com</a>
     </div>
 
   </div>
@@ -315,84 +314,11 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.app-root {
-  position: relative;
-  overflow-x: hidden;
-  min-height: 100vh;
-}
-
-/* Hero Section - works with WebGL background from App.vue */
-.hero-section {
-  position: relative;
-  height: 90vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.hero-content {
-  position: relative;
-  z-index: 3;
-  padding: 5rem 1rem 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  text-align: center;
-  max-width: 4xl;
-  margin: 0 auto;
-}
-
-/* Main Content */
-.main-content {
-  position: relative;
-  z-index: 2;
-}
-
-/* Typing Animation */
-.typing {
-  position: relative;
-  z-index: 1;
-  border-right: .1em solid #FFC107;
-  white-space: nowrap;
-  overflow: hidden;
-  animation: blink-caret .75s step-end infinite;
-  font-weight: 600;
-}
-
-@keyframes blink-caret {
-  from, to { border-color: transparent }
-  50% { border-color: #FFC107; }
-}
-
-/* Feature Cards */
-.feature-card {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.feature-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-}
-
-/* Smooth scrolling */
+/* Minimal custom styles - most moved to Tailwind classes */
 html {
   scroll-behavior: smooth;
 }
 
-/* Hero footer adjustments */
-.hero-footer {
-  z-index: 60;
-}
-
-@media (max-width: 768px) {
-  .hero-footer {
-    font-size: 0.75rem;
-  }
-}
-
-/* Section spacing */
 section {
   scroll-margin-top: 80px;
 }

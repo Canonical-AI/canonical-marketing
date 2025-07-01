@@ -661,7 +661,7 @@ window.appTransitionContainer = transitionContainer;
   height: 150%;
   z-index: 0;
   overflow: hidden;
-  filter: blur(15px);
+  filter: blur(15px) brightness(0.8);
   will-change: transform;
 }
 

@@ -17,6 +17,7 @@
   -moz-osx-font-smoothing: grayscale;
 
   --background: #1A0F15; /* Darker eggplant-black */
+  --background-dark: #0e070b; /* Darker eggplant-black */
   --surface: #24232A; /* Darker eggplant-black */
   --surface-bright: #35303A; /* Darker medium eggplant */
   --surface-light: #4A3B45; /* Darker lighter eggplant */
@@ -88,6 +89,25 @@
 
 /* Reusable surface classes */
 @layer components {
+  /* Custom glassmorphism classes - separate from Vuetify's bg-surface utilities */
+  .glass-surface {
+    background-color: rgb(36 35 42 / 0.8) !important; /* 80% opacity */
+    backdrop-filter: blur(30px) !important;
+    -webkit-backdrop-filter: blur(30px) !important;
+  }
+
+  .glass-surface-variant {
+    background-color: rgba(13, 10, 12, 0.8) !important; /* surface-variant with 80% opacity */
+    backdrop-filter: blur(30px) !important;
+    -webkit-backdrop-filter: blur(30px) !important;
+  }
+
+  .glass-surface-light {
+    background-color: rgb(74 59 69 / 0.8) !important; /* surface-light with 80% opacity */
+    backdrop-filter: blur(30px) !important;
+    -webkit-backdrop-filter: blur(30px) !important;
+  }
+
   /* Glassmorphism surface - main variant */
   .surface-glass {
     @apply bg-opacity-10 backdrop-blur-2xl border border-opacity-90 border-white text-white;
@@ -100,6 +120,11 @@
     @apply backdrop-blur-2xl border text-white;
     background: var(--app-bar-bg);
     border-color: var(--glass-border-light);
+  }
+
+  .surface-glass-dark {
+    @apply backdrop-blur-2xl text-white;
+    background: var(--background-dark);
   }
 
   /* App bar surface */
