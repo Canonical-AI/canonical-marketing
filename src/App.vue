@@ -1,285 +1,638 @@
 <template>
-  <div class="app-root h-screen w-full overflow-clip flex flex-col">
-    <!-- App Bar -->
-
-    <header class="sticky top-0 z-50 bg-transparent" :class="{ 'bg-surface': openFAQ }">
-      <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
-        
-        <div class="md:text-xl lg:text-2xl  text-on-surface-variant flex items-center space-x-2"> 
-          <img src="/favicon.ico" alt="Canonical" class="logo w-10 h-10 mx-2" />
-          Canonical <strong>[BETA]</strong>
-        </div>
-        <div class="space-x-4">
-          <a class="text-on-surface-variant hover:text-primary transition-colors" @click="toggleFAQ">About</a>
-          <a href="https://canonical-prod.web.app/document/7Smjq3YGDK2YW2ULrbMv?v=1.0.0" class="bg-warning text-white px-4 py-2 rounded-md hover:bg-primary-darken-1 transition-colors">try</a>
-        </div>
-      </nav>
-    </header>
-
-    <div v-if="openFAQ" class="faq p-8 px-24 bg-surface z-50 overflow-auto">
-      <h1 class="text-left text-2xl mb-5 font-light">Frequently Asked Questions</h1>
-      <div v-for="(faq, index) in faqs" :key="index" class="faq-item text-left mb-5">
-        <h2 class="text-lg mb-2.5 font-semibold">{{ faq.question }}</h2>
-        <p class="text-md">{{ faq.answer }}</p>
-      </div>
-      <div class="flex justify-end">
-        <a href="https://github.com/Canonical-AI" class="text-on-surface-variant hover:text-primary transition-colors mx-2">GitHub</a>
-        <a href="https://www.linkedin.com/in/john-azzinaro-mba-6a1a6b59/" class="text-on-surface-variant hover:text-primary transition-colors mx-2">LinkedIn</a>
-      </div>
+  <v-app>
+    <!-- WebGL Background -->
+    <div ref="backgroundContainer" class="background-container">
+      <img ref="backgroundImage" src="/login-background.avif" alt="" class="background-image-hidden" />
     </div>
-
-    <!-- Hero Section -->
     
-    <div class="hero ">
-      <div class="hero-gradient"></div>
-      <div class="gradient-blob-1"></div>
-      <div class="gradient-blob-2"></div>
-      <div class="gradient-blob-3"></div>
-      <div class="gradient-blob-4"></div>
-      <div class="z-10">
-        <div class="md:text-xl lg:text-5xl typing my-16">> {{ currentPhrase }}</div>
-        <h2 class="md:text-lg lg:text-xl font-light my-6">coming soon...</h2>
-        <a href="https://canonical-prod.web.app/document/7Smjq3YGDK2YW2ULrbMv?v=1.0.0" class="mx-2 my-6 bg-warning md:text-lg lg:text-xl text-white px-8 py-2 rounded-full hover:bg-primary-darken-1 transition-colors z-50">Launch Beta &#128640;</a>
-      </div>
-    </div>
+    <!-- Transition container for hover effect -->
+    <div ref="transitionContainer" class="transition-container"></div>
+    
+    <!-- App Bar -->
+    <v-app-bar
+      :elevation="0"
+      class="surface-app-bar"
+      color="transparent"
+      theme="dark"
+      density="compact"
+    >
+      <template v-slot:prepend>
+        <div class="logo-section" @click="router.push('/')">
+          <img src="/favicon.ico" alt="Canonical" class="logo-icon" />
+          <span class="logo-text">Canonical</span>
+        </div>
+      </template>
 
-    <div class="hero-footer fixed bottom-0 left-0 right-0 flex justify-center items-center p-2 space-x-4">
-      <a href="https://github.com/Canonical-AI/.github/blob/main/Privacy.md" class="text-on-surface-variant hover:text-primary transition-colors">privacy</a>
-      <a href="https://github.com/Canonical-AI/.github/blob/main/Terms.md" class="text-on-surface-variant hover:text-primary transition-colors">terms</a>
-      <p> &copy; 2024 Canonical </p>
-    </div>
+      <template v-slot:append>
+        <div class="flex items-center gap-2 md:gap-3">
+          <v-btn
+            v-if="$route.name === 'Home'"
+            variant="text"
+            @click="scrollToSection('features')"
+            class="btn-nav"
+          >
+            Features
+          </v-btn>
+          <v-btn
+            v-if="$route.name !== 'ManageAccount'"
+            variant="text"
+            :to="{ name: 'About' }"
+            class="btn-nav"
+          >
+            About
+          </v-btn>
+          <v-btn
+            v-if="$route.name !== 'ManageAccount'"
+            variant="text"
+            href="https://canonical-prod.web.app/document/7Smjq3YGDK2YW2ULrbMv?v=1.0.0"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn-nav"
+          >
+            <v-icon start>mdi-play</v-icon>
+            Demo
+          </v-btn>
+          
+          <!-- Authenticated User Menu -->
+          <template v-if="user">
+            <v-menu offset-y>
+              <template v-slot:activator="{ props }">
+                <v-btn
+                  v-bind="props"
+                  variant="text"
+                  class="user-avatar-btn"
+                  min-width="0"
+                >
+                  <v-avatar
+                    variant="tonal"
+                    size="32"
+                  >
+                    <span class="text-white font-weight-bold">
+                      {{ getInitial(user?.email) }}
+                    </span>
+                  </v-avatar>
+                </v-btn>
+              </template>
+              <v-list class="user-menu">
+                <v-list-item :to="{ name: 'ManageAccount' }" class="menu-item">
+                  <template v-slot:prepend>
+                    <v-icon>mdi-account</v-icon>
+                  </template>
+                  <v-list-item-title>Account</v-list-item-title>
+                </v-list-item>
+                <v-list-item @click="handleSignOut" class="menu-item">
+                  <template v-slot:prepend>
+                    <v-icon>mdi-logout</v-icon>
+                  </template>
+                  <v-list-item-title>Sign Out</v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
+          </template>
+          
+          <!-- Unauthenticated User Buttons -->
+          <template v-else>
+            <v-btn
+              variant="text"
+              @click="handleSignIn"
+              class="btn-signin"
+            >
+              Sign In
+            </v-btn>
+            <v-btn
+              variant="elevated"
+              color="warning"
+              :to="{ name: 'Signup' }"
+              class="text-sm font-semibold"
+            >
+              Sign Up
+            </v-btn>
+          </template>
 
-  </div>
+
+          <v-btn 
+            color="warning" 
+            variant="elevated"
+            @click="handleLaunchApp"
+            :loading="launchAppLoading"
+          > 
+            Launch App
+          </v-btn>
+        </div>
+      </template>
+    </v-app-bar>
+    
+    <v-main>
+      <router-view />
+    </v-main>
+
+    <!-- Sign In Modal -->
+    <v-dialog v-model="showSignInModal" max-width="500px" persistent>
+      <v-card class="surface-modal">
+        <v-card-title class="modal-header">
+          <span class="modal-title">Sign In</span>
+          <v-btn icon variant="text" @click="closeSignInModal" class="close-btn">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+        </v-card-title>
+        
+        <v-card-text class="modal-content">
+          <div v-if="signInError" class="error-alert">{{ signInError }}</div>
+          
+          <!-- Social Sign In Buttons -->
+          <div class="flex flex-col gap-3 mb-6">
+            <v-btn
+              @click="handleSocialSignIn('google')"
+              :loading="signInLoading"
+              block
+              variant="outlined"
+              class="btn-social google"
+            >
+              <v-icon start>mdi-google</v-icon>
+              Continue with Google
+            </v-btn>
+            
+            <v-btn
+              @click="handleSocialSignIn('github')"
+              :loading="signInLoading"
+              block
+              variant="outlined"
+              class="btn-social github"
+            >
+              <v-icon start>mdi-github</v-icon>
+              Continue with GitHub
+            </v-btn>
+          </div>
+
+          <!-- Divider -->
+          <div class="divider">
+            <div class="divider-line"></div>
+            <span class="divider-text">or continue with email</span>
+            <div class="divider-line"></div>
+          </div>
+
+          <!-- Email Sign In Form -->
+          <v-form @submit.prevent="handleEmailSignIn" class="form-field">
+            <v-text-field
+              v-model="signInEmail"
+              label="Email"
+              type="email"
+              required
+              variant="outlined"
+              class="mb-3"
+            ></v-text-field>
+            
+            <v-text-field
+              v-model="signInPassword"
+              label="Password"
+              type="password"
+              required
+              variant="outlined"
+              class="mb-4"
+            ></v-text-field>
+            
+            <v-btn
+              type="submit"
+              :loading="signInLoading"
+              block
+              color="warning"
+              variant="elevated"
+              class="font-semibold mb-6"
+            >
+              Sign In
+            </v-btn>
+          </v-form>
+
+          <!-- Footer -->
+          <div class="footer-text">
+            Don't have an account? 
+            <a @click="closeSignInModal(); $router.push('/signup')" class="footer-link">Sign up</a>
+          </div>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+  </v-app>
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted, onUnmounted, nextTick } from 'vue';
+import { useRouter } from 'vue-router';
+import { 
+  Scene, 
+  OrthographicCamera, 
+  WebGLRenderer, 
+  PlaneGeometry, 
+  ShaderMaterial, 
+  Mesh, 
+  TextureLoader,
+  Vector2 
+} from 'three';
+import { onAuthStateChange, signOutUser, signInWithEmail, signInWithSocial, googleProvider, githubProvider, handleLaunchApp as launchApp } from './firebase.js';
 
-const openFAQ = ref(false);
-const toggleFAQ = () => {
-  openFAQ.value = !openFAQ.value;
+const router = useRouter();
+
+// Authentication state
+const user = ref(null);
+const showSignInModal = ref(false);
+const signInLoading = ref(false);
+const signInError = ref('');
+const signInEmail = ref('');
+const signInPassword = ref('');
+const launchAppLoading = ref(false);
+
+const scrollToSection = (sectionId) => {
+  const element = document.getElementById(sectionId);
+  if (element) {
+    element.scrollIntoView({ behavior: 'smooth' });
+  }
 };
 
-const faqs = ref([
+const getInitial = (email) => {
+  // Get the first letter from the email
+  return email ? email.charAt(0).toUpperCase() : 'U';
+};
 
-{ question: 'What is Canonical?', answer: 'Canonical is a platform for artifact creation, curation, and collaboration. Designed for product people by a proudct person. Why should devs get all the cool tools?. My vision is to blur the lines between engineering and product work and enable more people to build great products.' },
-{ question: 'Who built Canonical?', answer: 'My name is John Azzinaro, Ex-AWS Technical Product Manager, with over five years of product management experience, and 10 years working in engineering.' },
-{ question: 'Why did you build Canonical?', answer: 'Ive been coding for over a decade, and I wanted to build a tool that would make it easier for the people doing all the "soft stuff" to do their jobs like how engineers do their coding. in engineering we have concepts like commits, versioning, referencing and reviewing. This is the first step in that direction.' },
-{ question: 'Whats next?', answer: 'Visit Github to see the public roadmap, or visit the demo site to see all of the product artifacts for Canonical live!' },
-// Add more FAQs as needed
-]);
+// Auth functions
+const handleSignIn = () => {
+  showSignInModal.value = true;
+  signInError.value = '';
+};
 
-const phrases = ref([
-  'Build Artifacts...',
-  'Craft your Canon...',
-  'Unbound Development...',
-  'Embrace #founder-mode...',
-  'Co-pilot for Product...',
-]);
+const handleEmailSignIn = async () => {
+  if (!signInEmail.value || !signInPassword.value) {
+    signInError.value = 'Please enter both email and password';
+    return;
+  }
 
+  signInLoading.value = true;
+  signInError.value = '';
 
-const currentPhrase = ref('');
-let i = 0;
-let isDeleting = false;
-let typingSpeed = 120; // Normal typing speed
-let deletingSpeed = 48; // Faster deleting speed
-let pauseDuration = 1080; // Pause duration after typing a full phrase
-
-const typePhrase = () => {
-  const fullText = phrases.value[i];
-  if (!isDeleting) {
-    currentPhrase.value = fullText.substring(0, currentPhrase.value.length + 1);
-    if (currentPhrase.value === fullText) {
-      setTimeout(() => {
-        isDeleting = true;
-        typePhrase();
-      }, pauseDuration); // Pause before starting to delete
+  try {
+    const { user: authUser, error } = await signInWithEmail(signInEmail.value, signInPassword.value);
+    
+    if (error) {
+      signInError.value = error;
       return;
     }
-  } else {
-    currentPhrase.value = fullText.substring(0, currentPhrase.value.length - 1);
-    if (currentPhrase.value === '') {
-      isDeleting = false;
-      i = (i + 1) % phrases.value.length;
-    }
+
+    // Successfully signed in
+    showSignInModal.value = false;
+    signInEmail.value = '';
+    signInPassword.value = '';
+    router.push('/manage-account');
+  } catch (err) {
+    signInError.value = 'Failed to sign in. Please try again.';
+  } finally {
+    signInLoading.value = false;
   }
-  setTimeout(typePhrase, isDeleting ? deletingSpeed : typingSpeed);
+};
+
+const handleSocialSignIn = async (provider) => {
+  signInLoading.value = true;
+  signInError.value = '';
+
+  try {
+    const authProvider = provider === 'google' ? googleProvider : githubProvider;
+    const { user: authUser, error } = await signInWithSocial(authProvider);
+    
+    if (error) {
+      signInError.value = error;
+      return;
+    }
+
+    // Successfully signed in
+    showSignInModal.value = false;
+    router.push('/manage-account');
+  } catch (err) {
+    signInError.value = `Failed to sign in with ${provider}. Please try again.`;
+  } finally {
+    signInLoading.value = false;
+  }
+};
+
+const handleSignOut = async () => {
+  try {
+    await signOutUser();
+    router.push('/');
+  } catch (err) {
+    console.error('Sign out error:', err);
+  }
+};
+
+const closeSignInModal = () => {
+  showSignInModal.value = false;
+  signInEmail.value = '';
+  signInPassword.value = '';
+  signInError.value = '';
+};
+
+// Launch App with Authentication Handoff
+const handleLaunchApp = async () => {
+  launchAppLoading.value = true;
+  
+  try {
+    await launchApp(user.value);
+  } finally {
+    launchAppLoading.value = false;
+  }
+};
+
+// WebGL background variables
+const backgroundContainer = ref(null);
+const backgroundImage = ref(null);
+const transitionContainer = ref(null);
+
+let scene, camera, renderer, planeMesh;
+let animationId = null;
+let animationTime = 0;
+
+const ANIMATION_CONFIG = {
+  waveIntensity: 0.060,
+  timeSpeed: 0.002
+};
+
+// Shaders for background animation
+const vertexShader = `
+  varying vec2 vUv;
+  void main() {
+    vUv = uv;
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+  }
+`;
+
+const fragmentShader = `
+  uniform float u_time;
+  uniform vec2 u_mouse;
+  uniform float u_intensity;
+  uniform sampler2D u_texture;
+  varying vec2 vUv;
+
+  void main() {
+    vec2 uv = vUv;
+    float wave1 = sin(uv.x * 10.0 + u_time * 0.5 + u_mouse.x * 5.0) * u_intensity;
+    float wave2 = sin(uv.y * 12.0 + u_time * 0.8 + u_mouse.y * 4.0) * u_intensity;
+    float wave3 = cos(uv.x * 8.0 + u_time * 0.5 + u_mouse.x * 3.0) * u_intensity;
+    float wave4 = cos(uv.y * 9.0 + u_time * 0.7 + u_mouse.y * 3.5) * u_intensity;
+
+    uv.y += wave1 + wave2;
+    uv.x += wave3 + wave4;
+    
+    gl_FragColor = texture2D(u_texture, uv);
+  }
+`;
+
+const initializeScene = (texture) => {
+  const container = backgroundContainer.value;
+  if (!container) {
+    console.warn('Container not available for Three.js initialization');
+    return;
+  }
+  
+  const width = container.offsetWidth || window.innerWidth;
+  const height = container.offsetHeight || window.innerHeight;
+  
+  if (width === 0 || height === 0) {
+    console.warn('Container has no dimensions, retrying...');
+    setTimeout(() => initializeScene(texture), 100);
+    return;
+  }
+  
+  camera = new OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
+  camera.position.z = 1;
+  
+  scene = new Scene();
+  
+  const shaderUniforms = {
+    u_time: { type: "f", value: 1.0 },
+    u_mouse: { type: "v2", value: new Vector2(0.5, 0.5) },
+    u_intensity: { type: "f", value: ANIMATION_CONFIG.waveIntensity },
+    u_texture: { type: "t", value: texture }
+  };
+  
+  planeMesh = new Mesh(
+    new PlaneGeometry(2, 2),
+    new ShaderMaterial({
+      uniforms: shaderUniforms,
+      vertexShader,
+      fragmentShader
+    })
+  );
+  
+  scene.add(planeMesh);
+  
+  renderer = new WebGLRenderer({ 
+    alpha: false, 
+    antialias: true,
+    preserveDrawingBuffer: false,
+    powerPreference: "high-performance"
+  });
+  renderer.setSize(width, height);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  
+  while (container.firstChild) {
+    container.removeChild(container.firstChild);
+  }
+  
+  container.appendChild(renderer.domElement);
+  
+  animateScene();
+};
+
+const animateScene = () => {
+  if (!planeMesh || !renderer) return;
+  
+  animationId = requestAnimationFrame(animateScene);
+  
+  animationTime += ANIMATION_CONFIG.timeSpeed;
+  
+  const loopX = 0.5 + Math.sin(animationTime * 0.3) * 1.6;
+  const loopY = 0.5 + Math.cos(animationTime * 0.2) * 1.2;
+  
+  const uniforms = planeMesh.material.uniforms;
+  uniforms.u_intensity.value = ANIMATION_CONFIG.waveIntensity;
+  uniforms.u_time.value = animationTime;
+  uniforms.u_mouse.value.set(loopX, loopY);
+  
+  renderer.render(scene, camera);
+};
+
+const handleResize = () => {
+  if (!camera || !renderer || !backgroundContainer.value) return;
+  
+  const container = backgroundContainer.value;
+  renderer.setSize(container.offsetWidth, container.offsetHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+};
+
+// Add parallax scroll handler
+const handleParallaxScroll = () => {
+  if (!backgroundContainer.value) return;
+  
+  const scrollY = window.scrollY;
+  const parallaxSpeed = 0.2; // Reduced for more subtle effect
+  
+  // Apply parallax transform to the WebGL background
+  backgroundContainer.value.style.transform = `translateY(${scrollY * parallaxSpeed}px)`;
 };
 
 onMounted(() => {
-  typePhrase();
+  window.addEventListener('resize', handleResize);
+  window.addEventListener('scroll', handleParallaxScroll);
+  
+  // Listen for auth state changes
+  const unsubscribe = onAuthStateChange((authUser) => {
+    user.value = authUser;
+  });
+  
+  // Store unsubscribe function for cleanup
+  window.authUnsubscribe = unsubscribe;
+  
+  nextTick(() => {
+    setTimeout(() => {
+      const textureLoader = new TextureLoader();
+      textureLoader.load('/login-background.avif', (texture) => {
+        initializeScene(texture);
+        setTimeout(() => {
+          handleResize();
+        }, 100);
+      });
+    }, 50);
+  });
 });
 
+onUnmounted(() => {
+  if (animationId) {
+    cancelAnimationFrame(animationId);
+  }
+  
+  if (renderer) {
+    renderer.dispose();
+  }
+  
+  window.removeEventListener('resize', handleResize);
+  window.removeEventListener('scroll', handleParallaxScroll);
+  
+  // Clean up auth listener
+  if (window.authUnsubscribe) {
+    window.authUnsubscribe();
+  }
+});
+
+// Export transition container ref for child components to use
+window.appTransitionContainer = transitionContainer;
 </script>
 
-<style scoped>
-/* App Bar Styles */
+<style>
+/* Component-specific styles that can't be replaced */
 
-
-
-.app-root::before {
-     content: '';
-     position: absolute;
-     top: 0;
-     left: 0;
-     width: 100%;
-     height: 100%;
-     background: url('/grain.png') repeat;
-     opacity: 0.06; /* Adjust opacity as needed */
-     pointer-events: none;
-     z-index: 1; /* Ensure it overlays the content */
-   }
-
-.app-root {
-  position: relative; /* Ensure it is positioned relative to the viewport */
-  overflow-x: hidden; /* Prevent horizontal overflow */
-}
-/* Hero Section Styles */
-.hero {
-  position: absolute; /* Establish a positioning context for absolute children */
-  padding: 0;
-  margin: 0;
-  display: flex;
-  align-items: center; /* Center children vertically */
-  justify-content: center; /* Center children horizontally */
-  color: white;
-  height: 100vh;
-  width: 100vw;
+/* WebGL Background - unique to this component */
+.background-container {
+  position: fixed;
+  top: -20%;
+  left: 0;
+  width: 100%;
+  height: 150%;
+  z-index: 0;
+  overflow: hidden;
+  filter: blur(15px);
+  will-change: transform;
 }
 
-.hero-gradient {
-  position: absolute;
+.background-container canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover;
+  filter: saturate(80%);
+}
+
+.background-image-hidden {
+  display: none;
+}
+
+/* Transition container for hover effects - unique to this component */
+.transition-container {
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(42deg, 
-              var(--background) 0%, 
-              var(--success) 45%, 
-              var(--secondary-darken-1) 56%, 
-              var(--primary) 78%, 
-              var(--surface) 100%);
-  z-index: 0; /* Ensure this is behind the typing class */
-  filter: url(#goo) blur(50px) ;
-  opacity: 0.7;
-
+  z-index: 100;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
-.gradient-blob-1 {
-    position: absolute;
-    background: radial-gradient(circle at center, rgba(var(--warning-rgb), 0.8) 0, rgba(var(--primary-rgb), 0) 50%);
-    /* background: radial-gradient(circle at center, red 0, black 50%) no-repeat; */
+.transition-container.active {
+  opacity: 1;
+  pointer-events: all;
+}
 
-    mix-blend-mode: var(--blending);
+/* App specific overrides */
+#app {
+  position: relative;
+  min-height: 100vh;
+}
 
-    width: var(--circle-size);
-    height: var(--circle-size);
-    top: calc(50% - var(--circle-size) / 2);
-    left: calc(50% - var(--circle-size) / 2);
-    filter: url(#goo) blur(20px) ;
-
-    transform-origin: center center;
-    animation: yellow 20s ease infinite;
-
-    opacity: .8;
+/* Mobile responsive adjustments for Vuetify buttons */
+@media (max-width: 768px) {
+  .v-btn.btn-nav {
+    font-size: 0.75rem !important;
+    min-width: auto !important;
+    padding: 0.25rem 0.5rem !important;
   }
+}
 
-.gradient-blob-2 {
-    position: absolute;
-    background: radial-gradient(circle at center, rgba( var(--success-rgb), 1) 0, rgba( var(--secondary-rgb), 0) 50%) no-repeat;
-    mix-blend-mode: var(--blending);
-
-    width: var(--circle-size);
-    height: var(--circle-size);
-    top: calc(50% - var(--circle-size) / 2);
-    left: calc(50% - var(--circle-size) / 2);
-
-    transform-origin: calc(50% - 400px);
-    animation: green 20s reverse infinite;
-    filter: url(#goo) blur(20px) ;
-
-    opacity: 1;
+@media (max-width: 480px) {
+  .v-btn.btn-nav {
+    font-size: 0.7rem !important;
+    padding: 0.2rem 0.4rem !important;
   }
+}
 
-.gradient-blob-3 {
-    position: absolute;
-    background: radial-gradient(circle at center, rgba(var(--primary-rgb), 0.8) 0, rgba(var(--warning-rgb), 0) 50%) no-repeat;
-    mix-blend-mode: var(--blending);
+/* User Avatar Button */
+.user-avatar-btn {
+  padding: 0.25rem !important;
+  min-width: auto !important;
+}
 
-    width: var(--circle-size);
-    height: var(--circle-size);
-    top: calc(50% - var(--circle-size));
-    left: calc(50% - var(--circle-size) / 2);
+.user-avatar-small {
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
 
-    transform-origin: calc(50% + 400px);
-    animation: red 40s linear infinite;
-    filter: url(#goo) blur(20px) ;
+/* User Menu */
+.user-menu {
+  background: rgba(30, 30, 30, 0.95) !important;
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.5rem;
+  min-width: 150px;
+}
 
-    opacity: 1;
+.user-menu .menu-item {
+  color: white !important;
+  transition: background-color 0.2s ease;
+}
+
+.user-menu .menu-item:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+}
+
+.user-menu .v-list-item-title {
+  color: white !important;
+}
+
+.user-menu .v-icon {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+@media (max-width: 768px) {
+  .user-avatar-small {
+    width: 32px !important;
+    height: 32px !important;
+    font-size: 0.875rem;
   }
-
-.gradient-blob-4 {
-    position: absolute;
-    background: radial-gradient(circle at center, rgba(194, 70, 152, 0.8) 0, rgba(var(--warning-rgb), 0) 50%) no-repeat;
-    mix-blend-mode: var(--blending);
-
-    width: var(--circle-size);
-    height: var(--circle-size);
-    top: calc(50% - var(--circle-size));
-    left: calc(50% - var(--circle-size) / 2);
-
-    transform-origin: calc(50% + 400px);
-    animation: purple 30s linear infinite;
-    filter: url(#goo) blur(20px) ;
-
-    opacity: 1;
-  }
-
-  @keyframes yellow {
-  0% {top: 66.67%; left: 33.33%; transform: scale(1);}
-  30% {top: 90%; left: 50%; transform: scale(1.2);}
-  60% {top: 0%; left: 66.67%; transform: scale(1.3);}
-  100% {top: 66.67%; left: 33.33%; transform: scale(1);}
 }
-
-@keyframes green {
-  0% {top: 26.67%; right: -5%; transform: scale(1.2);}
-  30% {top: 90%; right: -5%;transform: scale(1);}
-  60% {top: 66.67%; right: 33.33%;transform: scale(1);}
-  100% {top: 0%; right: -5%; transform: scale(1.2);}
-}
-
-@keyframes red {
-  0% {top: 83.33%; right: 0%; transform: scale(1);}
-  30% {top: 0%; right: 50%;transform: scale(1.4);}
-  60% {top: 83.33%; right: 33.33%;transform: scale(1);}
-  100% {top: 83.33%; right: 0%; transform: scale(1);}
-}
-
-@keyframes purple {
-  0% {top: 83.33%; right: 0%; transform: scale(1.3);}
-  30% {top: 0%; right: 50%;transform: scale(1.4);}
-  60% {top: 83.33%; right: 33.33%;transform: scale(1.6);}
-  100% {top: 83.33%; right: 0%; transform: scale(1);}
-}
-
-
-/* Typing Animation */
-.typing {
-  position: relative; /* Ensure it is positioned relative to the hero-gradient */
-  z-index: 1; /* Ensure it is above the hero-gradient */
-  border-right: .1em solid white;
-  white-space: nowrap;
-  overflow: hidden;
-  animation: blink-caret .75s step-end infinite;
-  font-weight: 600;
-}
-
-@keyframes blink-caret {
-  from, to { border-color: transparent }
-  50% { border-color: white; }
-}
-
 </style>
 
 

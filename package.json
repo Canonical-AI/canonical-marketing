@@ -4,20 +4,34 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "setup": "node scripts/setup.js",
     "dev": "vite",
+    "dev:test": "VITE_USE_EMULATOR=true vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "emulators": "firebase emulators:start --import=./emulator-data --export-on-exit",
+    "emulators:fresh": "firebase emulators:start",
+    "deploy": "npm run build && firebase deploy --only hosting:landing",
+    "deploy:dev": "firebase use dev && npm run build && firebase deploy --only hosting:landing",
+    "deploy:prod": "firebase use prod && npm run build && firebase deploy --only hosting:landing"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.20",
+    "firebase-tools": "^13.0.0",
     "postcss": "^8.4.47",
     "tailwindcss": "^3.4.14",
     "vite": "^5.4.9"
   },
   "dependencies": {
+    "@mdi/font": "^7.4.47",
     "@mdi/js": "^7.4.47",
     "@vitejs/plugin-vue": "^5.1.4",
+    "firebase": "^10.7.0",
+    "hover-effect": "^1.2.1",
     "lucide-vue-next": "^0.453.0",
-    "vue": "^3.5.12"
+    "three": "^0.178.0",
+    "vue": "^3.5.12",
+    "vue-router": "^4.5.1",
+    "vuetify": "^3.9.0-beta.1"
   }
 }
