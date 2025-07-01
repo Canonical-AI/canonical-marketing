@@ -1,0 +1,17 @@
+{
+  "projects": {
+    "default": "canonical-dev-b6afd",
+    "dev": "canonical-dev-b6afd",
+    "prod": "canonical-prod"
+  },
+  "targets": {
+    "canonical-dev-b6afd": {
+      "hosting": {
+        "landing": [
+          "canonical-landing"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}
