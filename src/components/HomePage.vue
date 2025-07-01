@@ -4,11 +4,11 @@
     <section class="hero-section">
       <div class="hero-overlay">
         <div class="hero-content">
-          <div class="md:text-2xl lg:text-6xl font-bold mb-4 text-white">
+          <div class="lg:text-6xl text-4xl font-bold mb-4 text-white">
             The AI for Product
           </div>
           <div class="md:text-lg lg:text-xl text-white/80 mb-8 max-w-2xl mx-auto">
-            Communicate effortlessly
+            Empower your team to build the best products for your customers
           </div>
           <div class="md:text-lg lg:text-2xl typing mb-8 text-warning">> {{ currentPhrase }}</div>
           <div class="space-y-4">
@@ -33,25 +33,28 @@
       <section class="py-20 px-6">
         <div class="container mx-auto max-w-4xl text-center">
           <h2 class="text-3xl lg:text-4xl font-bold mb-8 text-white">
-            Product Work Feels Chaotic Compared to Engineering
+            Product Work is Chaotic
           </h2>
-          <div class="grid md:grid-cols-2 gap-8 text-left">
-            <div class="space-y-4">
-              <h3 class="text-xl font-semibold text-warning">Engineering Has</h3>
-              <ul class="space-y-2">
-                <li>✅ Version control & commits</li>
-                <li>✅ Code reviews & collaboration</li>
-                <li>✅ Clear change history</li>
-                <li>✅ Structured workflows</li>
+          
+          <div class="grid md:grid-cols-2 gap-8 justify-center">
+            <div class="space-y-4 text-center">
+              <h3 class="text-xl font-semibold text-error">Challenges</h3>
+              <ul class="space-y-2 text-left">
+                <li>❌ Stakeholders out of sync</li>
+                <li>❌ Developers building wrong features</li>
+                <li>❌ Strategy gets lost in translation</li>
+                <li>❌ Context switching between tools</li>
+                <li>❌ "Final_v2_FINAL.doc" chaos</li>
               </ul>
             </div>
-            <div class="space-y-4">
-              <h3 class="text-xl font-semibold text-error">Product Usually Has</h3>
-              <ul class="space-y-2">
-                <li>❌ Scattered docs & files</li>
-                <li>❌ No change tracking</li>
-                <li>❌ Siloed collaboration</li>
-                <li>❌ "Final_v2_FINAL.doc"</li>
+            <div class="space-y-4 text-center">
+              <h3 class="text-xl font-semibold text-success">Happy state</h3>
+              <ul class="space-y-2 text-left">
+                <li>✅ Clear, organized product artifacts</li>
+                <li>✅ Aligned stakeholders & team</li>
+                <li>✅ Developers building right features</li>
+                <li>✅ Strategy that translates to execution</li>
+                <li>✅ Writing culture that drives results</li>
               </ul>
             </div>
           </div>
@@ -59,18 +62,27 @@
       </section>
 
       <!-- Solution Overview Section -->
-      <section class="py-20 px-6 bg-surface-variant">
-        <div class="container mx-auto max-w-4xl text-center">
-          <h2 class="text-3xl lg:text-4xl font-bold mb-8 text-white">
-            Meet Canonical: Git for Product Artifacts
-          </h2>
-          <p class="text-xl mb-12 text-on-surface-variant max-w-2xl mx-auto">
-            Create, version, and collaborate on product artifacts with the same discipline engineers use for code. 
-            PRDs, wireframes, specs, and more - all in one canonical source of truth.
-          </p>
-          <div class="bg-surface p-8 rounded-lg shadow-lg">
-            <p class="text-lg text-warning mb-4">🚀 Currently in Beta</p>
-            <p class="text-on-surface-variant">Join product teams who are already bringing engineering best practices to their workflow</p>
+      <section class="py-12 px-6 bg-surface-variant">
+        <div class="container mx-auto max-w-7xl">
+          <div class="grid lg:grid-cols-5 gap-12 items-center">
+            <!-- Left Column - Text Content -->
+            <div class="text-left lg:col-span-2">
+              <h2 class="text-3xl lg:text-4xl font-bold mb-8 text-white">
+                Meet Canonical: Where Product Strategy Meets Execution
+              </h2>
+              <p class="text-xl mb-8 text-on-surface-variant">
+                Organize your product artifacts to keep stakeholders coordinated, developers building the right thing, 
+                and product strategy on track. Built on best practices from product thought leaders.
+              </p>
+              <v-btn color="warning" @click="openDemo">
+                Try it now 
+              </v-btn>
+            </div>
+            
+            <!-- Right Column - Image -->
+            <div class="lg:col-span-3 flex justify-center lg:justify-start">
+              <img src="/productShowcase/editor.png" alt="Canonical Editor Interface" class="w-full max-w-4xl rounded-lg shadow-lg" />
+            </div>
           </div>
         </div>
       </section>
@@ -79,104 +91,86 @@
       <section id="features" class="py-20 px-6">
         <div class="container mx-auto max-w-6xl">
           <h2 class="text-3xl lg:text-4xl font-bold mb-16 text-center text-white">
-            Features That Transform Product Work
+            Features That Transform How You Build Products
           </h2>
           
           <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             
-            <!-- Feature 1: Artifact Versioning -->
+            <!-- Feature 1: Organized Artifacts -->
             <div class="feature-card bg-surface-light p-6 rounded-lg">
-              <div class="mb-4">
-                <img src="https://via.placeholder.com/300x180/4A5568/FFFFFF?text=Version+Control" alt="Artifact Versioning" class="w-full h-36 object-cover rounded-lg mb-4" />
-              </div>
-              <div class="text-warning text-3xl mb-4">📝</div>
-              <h3 class="text-xl font-semibold mb-3 text-white">Artifact Versioning</h3>
-              <p class="text-on-surface-variant mb-4">Track every change to your product documents with git-like version control. Never lose work or wonder what changed.</p>
-              <ul class="text-sm space-y-1 text-on-surface-variant/80">
-                <li>• Commit-based versioning</li>
-                <li>• Branch and merge workflows</li>
-                <li>• Change history tracking</li>
-                <li>• Rollback capabilities</li>
+              <div class="text-warning text-3xl mb-4">📋</div>
+              <h3 class="text-xl font-semibold mb-3 text-white">Organized Product Artifacts</h3>
+              <p class="text-on-surface-variant mb-4">Create and organize PRDs, user stories, specs, and roadmaps in one place. Keep your product strategy clear and accessible.</p>
+              <ul class="text-sm space-y-1 text-on-surface-variant/80 text-left">
+                <li>• Unified artifact management</li>
+                <li>• Clear information hierarchy</li>
+                <li>• Easy search and discovery</li>
+                <li>• Template-driven creation</li>
               </ul>
             </div>
 
-            <!-- Feature 2: Collaborative Reviews -->
+            <!-- Feature 2: Stakeholder Alignment -->
             <div class="feature-card bg-surface-light p-6 rounded-lg">
-              <div class="mb-4">
-                <img src="https://via.placeholder.com/300x180/4A5568/FFFFFF?text=Collaboration" alt="Collaborative Reviews" class="w-full h-36 object-cover rounded-lg mb-4" />
-              </div>
               <div class="text-warning text-3xl mb-4">👥</div>
-              <h3 class="text-xl font-semibold mb-3 text-white">Collaborative Reviews</h3>
-              <p class="text-on-surface-variant mb-4">Review product artifacts like code with proper feedback loops, approvals, and stakeholder management.</p>
-              <ul class="text-sm space-y-1 text-on-surface-variant/80">
-                <li>• Pull request-style reviews</li>
-                <li>• Stakeholder approvals</li>
-                <li>• Comment threading</li>
-                <li>• Review workflows</li>
+              <h3 class="text-xl font-semibold mb-3 text-white">Stakeholder Alignment</h3>
+              <p class="text-on-surface-variant mb-4">Keep everyone on the same page with clear communication tools and shared visibility into product decisions.</p>
+              <ul class="text-sm space-y-1 text-on-surface-variant/80 text-left">
+                <li>• Shared product visibility</li>
+                <li>• Comment and feedback loops</li>
+                <li>• Decision documentation</li>
+                <li>• Progress tracking</li>
               </ul>
             </div>
 
-            <!-- Feature 3: Cross-Reference System -->
+            <!-- Feature 3: Writing Culture -->
             <div class="feature-card bg-surface-light p-6 rounded-lg">
-              <div class="mb-4">
-                <img src="https://via.placeholder.com/300x180/4A5568/FFFFFF?text=Cross+Reference" alt="Smart Cross-References" class="w-full h-36 object-cover rounded-lg mb-4" />
-              </div>
-              <div class="text-warning text-3xl mb-4">🔗</div>
-              <h3 class="text-xl font-semibold mb-3 text-white">Smart Cross-References</h3>
-              <p class="text-on-surface-variant mb-4">Link artifacts, requirements, and specifications together with intelligent dependency tracking.</p>
-              <ul class="text-sm space-y-1 text-on-surface-variant/80">
-                <li>• Automatic linking</li>
-                <li>• Dependency graphs</li>
-                <li>• Impact analysis</li>
-                <li>• Reference integrity</li>
+              <div class="text-warning text-3xl mb-4">✍️</div>
+              <h3 class="text-xl font-semibold mb-3 text-white">Enable Writing Culture</h3>
+              <p class="text-on-surface-variant mb-4">Foster clear thinking through structured writing. Document decisions, rationale, and strategy that guides development.</p>
+              <ul class="text-sm space-y-1 text-on-surface-variant/80 text-left">
+                <li>• Structured thinking frameworks</li>
+                <li>• Decision documentation</li>
+                <li>• Strategy articulation</li>
+                <li>• Knowledge preservation</li>
               </ul>
             </div>
 
             <!-- Feature 4: Template Library -->
             <div class="feature-card bg-surface-light p-6 rounded-lg">
-              <div class="mb-4">
-                <img src="https://via.placeholder.com/300x180/4A5568/FFFFFF?text=Templates" alt="Template Library" class="w-full h-36 object-cover rounded-lg mb-4" />
-              </div>
-              <div class="text-warning text-3xl mb-4">📋</div>
-              <h3 class="text-xl font-semibold mb-3 text-white">Template Library</h3>
-              <p class="text-on-surface-variant mb-4">Start with proven templates for PRDs, specs, and other product artifacts. Customize to your needs.</p>
-              <ul class="text-sm space-y-1 text-on-surface-variant/80">
-                <li>• PRD templates</li>
-                <li>• Spec frameworks</li>
-                <li>• Custom templates</li>
-                <li>• Team standards</li>
+              <div class="text-warning text-3xl mb-4">📚</div>
+              <h3 class="text-xl font-semibold mb-3 text-white">Best Practice Templates</h3>
+              <p class="text-on-surface-variant mb-4">Built on frameworks from product thought leaders like Marty Cagan, Melissa Perri, and Rob Fitzpatrick. Start with proven structures.</p>
+              <ul class="text-sm space-y-1 text-on-surface-variant/80 text-left">
+                <li>• Thought leader frameworks</li>
+                <li>• PRD and spec templates</li>
+                <li>• Custom team standards</li>
+                <li>• Proven methodologies</li>
               </ul>
             </div>
 
             <!-- Feature 5: AI-Powered Insights -->
             <div class="feature-card bg-surface-light p-6 rounded-lg">
-              <div class="mb-4">
-                <img src="https://via.placeholder.com/300x180/4A5568/FFFFFF?text=AI+Insights" alt="AI-Powered Insights" class="w-full h-36 object-cover rounded-lg mb-4" />
-              </div>
               <div class="text-warning text-3xl mb-4">🤖</div>
-              <h3 class="text-xl font-semibold mb-3 text-white">AI-Powered Insights</h3>
-              <p class="text-on-surface-variant mb-4">Get intelligent suggestions, consistency checks, and automated improvements to your product artifacts.</p>
-              <ul class="text-sm space-y-1 text-on-surface-variant/80">
-                <li>• Content suggestions</li>
-                <li>• Consistency checking</li>
-                <li>• Auto-formatting</li>
-                <li>• Quality scoring</li>
+              <h3 class="text-xl font-semibold mb-3 text-white">Product-Focused AI</h3>
+              <p class="text-on-surface-variant mb-4">Specialized AI trained on product management best practices to help you create better artifacts and make better decisions.</p>
+              <ul class="text-sm space-y-1 text-on-surface-variant/80 text-left">
+                <li>• Product management insights</li>
+                <li>• Content improvement suggestions</li>
+                <li>• Strategy guidance</li>
+                <li>• Best practice recommendations</li>
               </ul>
             </div>
 
             <!-- Feature 6: Integration Ecosystem -->
             <div class="feature-card bg-surface-light p-6 rounded-lg">
-              <div class="mb-4">
-                <img src="https://via.placeholder.com/300x180/4A5568/FFFFFF?text=Integrations" alt="Tool Integration" class="w-full h-36 object-cover rounded-lg mb-4" />
-              </div>
               <div class="text-warning text-3xl mb-4">⚡</div>
-              <h3 class="text-xl font-semibold mb-3 text-white">Tool Integration</h3>
-              <p class="text-on-surface-variant mb-4">Connect with your existing tools like Figma, Jira, and Slack for seamless workflow integration.</p>
-              <ul class="text-sm space-y-1 text-on-surface-variant/80">
-                <li>• Figma sync</li>
-                <li>• Jira integration</li>
-                <li>• Slack notifications</li>
-                <li>• API connections</li>
+              <h3 class="text-xl font-semibold mb-3 text-white">Seamless Team Workflows</h3>
+              <p class="text-on-surface-variant mb-4">Connect with your existing tools to reduce context switching and keep your team focused on building great products.</p>
+              <ul class="text-sm space-y-1 text-on-surface-variant/80 text-left">
+                <li>• Design tool sync</li>
+                <li>• Development integration</li>
+                <li>• Communication channels</li>
+                <li>• Workflow automation</li>
               </ul>
             </div>
 
@@ -184,31 +178,6 @@
         </div>
       </section>
 
-      <!-- Trusted By Section -->
-      <section class="py-16 px-6 bg-surface-light">
-        <div class="container mx-auto max-w-4xl text-center">
-          <h3 class="text-lg font-semibold mb-8 text-on-surface-variant">
-            Trusted by builders at:
-          </h3>
-          <div class="grid grid-cols-2 md:grid-cols-5 gap-8 items-center justify-items-center opacity-60">
-            <div class="company-logo bg-surface p-4 rounded-lg w-24 h-16 flex items-center justify-center">
-              <span class="text-on-surface-variant font-semibold text-sm">ACME Inc</span>
-            </div>
-            <div class="company-logo bg-surface p-4 rounded-lg w-24 h-16 flex items-center justify-center">
-              <span class="text-on-surface-variant font-semibold text-sm">TechCorp</span>
-            </div>
-            <div class="company-logo bg-surface p-4 rounded-lg w-24 h-16 flex items-center justify-center">
-              <span class="text-on-surface-variant font-semibold text-sm">BuildCo</span>
-            </div>
-            <div class="company-logo bg-surface p-4 rounded-lg w-24 h-16 flex items-center justify-center">
-              <span class="text-on-surface-variant font-semibold text-sm">StartupX</span>
-            </div>
-            <div class="company-logo bg-surface p-4 rounded-lg w-24 h-16 flex items-center justify-center">
-              <span class="text-on-surface-variant font-semibold text-sm">InnovateLab</span>
-            </div>
-          </div>
-        </div>
-      </section>
 
       <!-- Social Proof Section -->
       <section class="py-20 px-6 bg-surface-variant">
@@ -226,22 +195,22 @@
               </div>
             </div>
             <blockquote class="text-lg italic text-on-surface-variant">
-              "I've been coding for over a decade and wanted to build a tool that makes it easier for product people to work with the same discipline engineers bring to their craft."
+              "Having been both an engineer and a product manager, I've seen how organized thinking and clear artifacts transform product outcomes. Canonical brings that discipline to product work."
             </blockquote>
           </div>
 
           <div class="grid md:grid-cols-3 gap-6 text-center">
             <div>
-              <div class="text-3xl font-bold text-warning">Beta</div>
-              <div class="text-on-surface-variant">Early Access</div>
+              <div class="text-3xl font-bold text-warning">Product-First</div>
+              <div class="text-on-surface-variant">Built for PM Workflows</div>
+            </div>
+            <div>
+              <div class="text-3xl font-bold text-warning">Best Practices</div>
+              <div class="text-on-surface-variant">Thought Leader Inspired</div>
             </div>
             <div>
               <div class="text-3xl font-bold text-warning">Open Source</div>
-              <div class="text-on-surface-variant">Transparent Development</div>
-            </div>
-            <div>
-              <div class="text-3xl font-bold text-warning">Product-First</div>
-              <div class="text-on-surface-variant">Built for Your Workflow</div>
+              <div class="text-on-surface-variant">Built for everyone</div>
             </div>
           </div>
         </div>
@@ -251,17 +220,17 @@
       <section class="py-20 px-6">
         <div class="container mx-auto max-w-4xl text-center">
           <h2 class="text-3xl lg:text-4xl font-bold mb-8 text-white">
-            Ready to Bring Order to Product Chaos?
+            Ready to Build Better Products?
           </h2>
           <p class="text-xl mb-12 text-on-surface-variant max-w-2xl mx-auto">
-            Join the beta and experience what product work looks like with engineering discipline. 
+            Join the beta and transform how your team creates, organizes, and collaborates on product artifacts. 
             No credit card required, 5-minute setup.
           </p>
           
           <div class="space-y-6">
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
               <router-link to="/signup" class="inline-block bg-warning text-white px-8 py-4 rounded-full hover:bg-primary-darken-1 transition-colors text-xl shadow-lg">
-                Start Creating Artifacts 🚀
+                Transform Your Product Work 🚀
               </router-link>
               <a href="https://canonical-prod.web.app/document/7Smjq3YGDK2YW2ULrbMv?v=1.0.0" target="_blank" rel="noopener noreferrer" class="inline-block border-2 border-on-surface-variant text-on-surface-variant px-8 py-4 rounded-full hover:bg-on-surface-variant hover:text-surface transition-colors text-xl shadow-lg">
                 Try Demo First
@@ -269,10 +238,7 @@
             </div>
             
             <div class="flex justify-center space-x-8 text-sm text-on-surface-variant">
-              <div class="flex items-center">
-                <span class="text-success mr-2">✓</span>
-                Free Beta Access
-              </div>
+
               <div class="flex items-center">
                 <span class="text-success mr-2">✓</span>
                 No Credit Card
@@ -302,11 +268,11 @@
 import { ref, onMounted } from 'vue';
 
 const phrases = ref([
-  'Build Product Artifacts.',
-  'Craft your Canon.',
-  'Unblock Development.',
-  'Embrace #founder-mode.',
-  'Co-pilot for Strategy.',
+  'Organize Product Artifacts.',
+  'Align Your Stakeholders.',
+  'Build The Right Thing.',
+  'Enable Writing Culture.',
+  'Transform Product Work.',
 ]);
 
 const currentPhrase = ref('');
@@ -337,6 +303,12 @@ const typePhrase = () => {
   setTimeout(typePhrase, isDeleting ? deletingSpeed : typingSpeed);
 };
 
+const openDemo = () => {
+  if (typeof window !== 'undefined') {
+    window.open('https://canonical-prod.web.app', '_blank');
+  }
+};
+
 onMounted(() => {
   typePhrase();
 });
@@ -352,13 +324,11 @@ onMounted(() => {
 /* Hero Section - works with WebGL background from App.vue */
 .hero-section {
   position: relative;
-  height: 100vh;
+  height: 90vh;
   display: flex;
   align-items: center;
   justify-content: center;
 }
-
-
 
 .hero-content {
   position: relative;
@@ -372,12 +342,6 @@ onMounted(() => {
   text-align: center;
   max-width: 4xl;
   margin: 0 auto;
-}
-
-@media (max-width: 768px) {
-  .hero-content {
-    padding: 8rem 1rem 0;
-  }
 }
 
 /* Main Content */
@@ -420,6 +384,12 @@ html {
 /* Hero footer adjustments */
 .hero-footer {
   z-index: 60;
+}
+
+@media (max-width: 768px) {
+  .hero-footer {
+    font-size: 0.75rem;
+  }
 }
 
 /* Section spacing */
