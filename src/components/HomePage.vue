@@ -10,7 +10,7 @@
           <div class="md:text-lg lg:text-xl text-white/80 mb-8 max-w-2xl mx-auto">
             Empower your team to build the best products for your customers
           </div>
-          <div class="md:text-lg lg:text-2xl typing mb-8 text-warning font-semibold border-r-2 border-warning animate-pulse">> {{ currentPhrase }}</div>
+          <div class="md:text-lg lg:text-2xl typing mb-8 text-warning font-semibold border-r-2 border-warning">> {{ currentPhrase }}</div>
           <div class="space-y-4">
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
               <router-link to="/signup" class="inline-block bg-warning md:text-lg lg:text-xl text-white px-8 py-3 rounded-full hover:bg-primary-darken-1 transition-colors shadow-lg">
