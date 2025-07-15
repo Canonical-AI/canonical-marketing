@@ -14,6 +14,7 @@ import {
   connectAuthEmulator
 } from 'firebase/auth';
 import { getAnalytics } from 'firebase/analytics';
+import { getFirestore, connectFirestoreEmulator } from 'firebase/firestore';
 
 // Environment detection
 const isDevelopment = import.meta.env.DEV;
@@ -53,10 +54,23 @@ const app = initializeApp(firebaseConfig);
 // Initialize Firebase Authentication and get a reference to the service
 export const auth = getAuth(app);
 
-// Connect to Auth emulator if in development
-if (useEmulator && !auth._delegate._config.emulator) {
-  console.log('🔧 Connecting to Firebase Auth emulator on localhost:9099');
-  connectAuthEmulator(auth, 'http://localhost:9099');
+// Initialize Firestore
+export const db = getFirestore(app);
+
+// Connect to emulators if in development
+if (useEmulator) {
+  if (!auth._delegate._config.emulator) {
+    console.log('🔧 Connecting to Firebase Auth emulator on localhost:9099');
+    connectAuthEmulator(auth, 'http://localhost:9099');
+  }
+  
+  // Connect to Firestore emulator
+  try {
+    connectFirestoreEmulator(db, 'localhost', 8080);
+    console.log('🔧 Connected to Firestore emulator on localhost:8080');
+  } catch (error) {
+    console.log('⚠️  Firestore emulator already connected or not available');
+  }
 }
 
 // Initialize Analytics (optional, not in emulator mode)

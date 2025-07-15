@@ -115,6 +115,71 @@
                 </div>
               </div>
             </div>
+
+            <!-- Privacy Preferences Card -->
+            <div class="surface-glass rounded-2xl p-6 text-white md:col-span-2">
+              <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-semibold flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.031 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                  </svg>
+                  Privacy Preferences
+                </h2>
+                <span class="text-white/70 text-sm">Last updated {{ formatDate(consentState.timestamp) }}</span>
+              </div>
+              
+              <div class="space-y-4 mb-6">
+                <p class="text-white/80 text-sm">
+                  Manage your privacy preferences and control how your data is used. 
+                  You can change these settings at any time.
+                </p>
+                
+                <!-- Consent Summary -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  <div class="text-center p-3 bg-white/5 rounded-lg">
+                    <div class="text-xs text-white/70 mb-1">Essential</div>
+                    <div class="text-sm font-medium text-green-400">Always Active</div>
+                  </div>
+                  <div class="text-center p-3 bg-white/5 rounded-lg">
+                    <div class="text-xs text-white/70 mb-1">Analytics</div>
+                    <div class="text-sm font-medium" :class="consentState.analytics ? 'text-green-400' : 'text-red-400'">
+                      {{ consentState.analytics ? 'Enabled' : 'Disabled' }}
+                    </div>
+                  </div>
+                  <div class="text-center p-3 bg-white/5 rounded-lg">
+                    <div class="text-xs text-white/70 mb-1">Marketing</div>
+                    <div class="text-sm font-medium" :class="consentState.marketing ? 'text-green-400' : 'text-red-400'">
+                      {{ consentState.marketing ? 'Enabled' : 'Disabled' }}
+                    </div>
+                  </div>
+                  <div class="text-center p-3 bg-white/5 rounded-lg">
+                    <div class="text-xs text-white/70 mb-1">Functional</div>
+                    <div class="text-sm font-medium" :class="consentState.functional ? 'text-green-400' : 'text-red-400'">
+                      {{ consentState.functional ? 'Enabled' : 'Disabled' }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="flex flex-col sm:flex-row gap-3">
+                <button 
+                  @click="openConsentModal" 
+                  class="bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary/80 transition-colors font-medium flex items-center justify-center gap-2"
+                >
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                  </svg>
+                  Manage Preferences
+                </button>
+                <button 
+                  @click="resetConsent" 
+                  class="bg-white/10 text-white px-6 py-3 rounded-lg border border-white/20 hover:bg-white/20 transition-colors font-medium"
+                >
+                  Reset to Defaults
+                </button>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -160,6 +225,30 @@
             </nav>
           </div>
 
+          <div class="surface-glass rounded-2xl p-6 mb-6">
+            <h3 class="text-lg font-semibold text-white mb-4">Privacy</h3>
+            <nav class="space-y-2">
+              <button @click="openConsentModal" class="btn-nav w-full flex items-center gap-3 p-3 rounded-lg hover:bg-white/10 transition-colors text-left">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.031 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                </svg>
+                Privacy Preferences
+              </button>
+              <a href="/privacy" target="_blank" class="btn-nav w-full flex items-center gap-3 p-3 rounded-lg hover:bg-white/10 transition-colors text-left">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                Privacy Policy
+              </a>
+              <a href="/cookies" target="_blank" class="btn-nav w-full flex items-center gap-3 p-3 rounded-lg hover:bg-white/10 transition-colors text-left">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4"></path>
+                </svg>
+                Cookie Policy
+              </a>
+            </nav>
+          </div>
+
           <div class="surface-glass rounded-2xl p-6">
             <h3 class="text-lg font-semibold text-white mb-4">Help & Support</h3>
             <nav class="space-y-2">
@@ -186,6 +275,13 @@
         </div>
       </div>
     </div>
+
+    <!-- GDPR Consent Modal -->
+    <ConsentModal
+      v-model:show="showConsentModal"
+      :initial-consent="getConsentState()"
+      @consent-updated="updateConsent"
+    />
   </div>
 </template>
 
@@ -193,15 +289,29 @@
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { auth, signOutUser, onAuthStateChange, handleLaunchApp } from '../firebase.js';
+import ConsentModal from './ConsentModal.vue';
+import { useConsent } from '../composables/useConsent.js';
 
 export default {
   name: 'ManageAccountPage',
+  components: {
+    ConsentModal
+  },
   setup() {
     const router = useRouter();
     const loading = ref(true);
     const error = ref('');
     const user = ref(null);
     const launchAppLoading = ref(false);
+
+    // GDPR Consent Management
+    const {
+      showConsentModal,
+      consentState,
+      updateConsent,
+      resetConsent: resetConsentState,
+      getConsentState
+    } = useConsent();
 
     // Mock data - in real app, this would come from your backend
     const currentPlan = ref({
@@ -301,6 +411,17 @@ export default {
       }
     };
 
+    // Consent management functions
+    const openConsentModal = () => {
+      showConsentModal.value = true;
+    };
+
+    const resetConsent = async () => {
+      if (confirm('Are you sure you want to reset your privacy preferences to defaults? This will disable all optional tracking.')) {
+        await resetConsentState();
+      }
+    };
+
     const loadAccountData = async () => {
       try {
         // In real app, fetch user data, projects, usage from backend
@@ -336,6 +457,14 @@ export default {
       projects,
       usage,
       launchAppLoading,
+      // Consent state and methods
+      showConsentModal,
+      consentState,
+      updateConsent,
+      getConsentState,
+      openConsentModal,
+      resetConsent,
+      // Helper functions
       getInitial,
       formatDate,
       formatBytes,

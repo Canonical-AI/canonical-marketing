@@ -254,8 +254,9 @@
     </div>
 
     <div class="fixed bottom-0 left-0 right-0 flex justify-center items-center p-2 space-x-4 bg-surface/80 backdrop-blur-sm z-50">
-      <a href="https://github.com/Canonical-AI/.github/blob/main/Privacy.md" target="_blank" rel="noopener noreferrer" class="text-white/70 hover:text-primary transition-colors">privacy</a>
-      <a href="https://github.com/Canonical-AI/.github/blob/main/Terms.md" target="_blank" rel="noopener noreferrer" class="text-white/70 hover:text-primary transition-colors">terms</a>
+      <router-link to="/privacy" class="text-white/70 hover:text-primary transition-colors">privacy</router-link>
+      <router-link to="/terms" class="text-white/70 hover:text-primary transition-colors">terms</router-link>
+      <router-link to="/security" class="text-white/70 hover:text-primary transition-colors">security</router-link>
       <p class="text-white/70"> &copy; 2025 Canonical-ai.com </p>
       <a href="mailto:team@canonic-ai.com" class="text-white/70 hover:text-primary transition-colors">team@canonic-ai.com</a>
     </div>

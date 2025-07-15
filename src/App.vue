@@ -228,6 +228,14 @@
       </v-card>
     </v-dialog>
 
+    <!-- GDPR Consent Modal -->
+    <ConsentModal
+      v-model:show="showConsentModal"
+      :initial-consent="getConsentState()"
+      :is-required="isConsentRequired"
+      @consent-updated="updateConsent"
+    />
+
     <!-- Mobile Navigation Drawer -->
     <v-navigation-drawer
       v-model="mobileMenuOpen"
@@ -354,6 +362,8 @@ import {
   Vector2 
 } from 'three';
 import { onAuthStateChange, signOutUser, signInWithEmail, signInWithSocial, googleProvider, githubProvider, handleLaunchApp as launchApp } from './firebase.js';
+import ConsentModal from './components/ConsentModal.vue';
+import { useConsent } from './composables/useConsent.js';
 
 const router = useRouter();
 
@@ -366,6 +376,16 @@ const signInEmail = ref('');
 const signInPassword = ref('');
 const launchAppLoading = ref(false);
 const mobileMenuOpen = ref(false);
+
+// GDPR Consent Management
+const {
+  showConsentModal,
+  isConsentRequired,
+  updateConsent,
+  getConsentState,
+  hasConsent,
+  applyConsentSettings
+} = useConsent();
 
 const scrollToSection = (sectionId) => {
   const element = document.getElementById(sectionId);

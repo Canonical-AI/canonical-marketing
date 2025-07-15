@@ -165,8 +165,9 @@
     <!-- Bottom Footer -->
     <div class="relative z-10 surface-app-bar">
       <div class="flex justify-center space-x-4 text-xs text-white/50 p-3">
-        <a href="https://github.com/Canonical-AI/.github/blob/main/Privacy.md" target="_blank" rel="noopener noreferrer" class="footer-link">Privacy</a>
-        <a href="https://github.com/Canonical-AI/.github/blob/main/Terms.md" target="_blank" rel="noopener noreferrer" class="footer-link">Terms</a>
+        <router-link to="/privacy" class="footer-link">Privacy</router-link>
+        <router-link to="/terms" class="footer-link">Terms</router-link>
+        <router-link to="/security" class="footer-link">Security</router-link>
         <span>&copy; 2025 Canonical-ai.com</span>
         <a href="mailto:team@canonic-ai.com" class="text-white/50 hover:text-primary transition-colors">team@canonic-ai.com</a>
       </div>
