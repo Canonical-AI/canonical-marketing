@@ -291,6 +291,7 @@ import { useRouter } from 'vue-router';
 import { auth, signOutUser, onAuthStateChange, handleLaunchApp } from '../firebase.js';
 import ConsentModal from './ConsentModal.vue';
 import { useConsent } from '../composables/useConsent.js';
+import { useAnalytics } from '../composables/useAnalytics.js';
 
 export default {
   name: 'ManageAccountPage',
@@ -312,6 +313,15 @@ export default {
       resetConsent: resetConsentState,
       getConsentState
     } = useConsent();
+
+    // Analytics setup
+    const {
+      trackPageView,
+      trackAppLaunch,
+      trackUpgradeClick,
+      trackProjectClick,
+      trackConsentAction
+    } = useAnalytics();
 
     // Mock data - in real app, this would come from your backend
     const currentPlan = ref({
@@ -378,12 +388,18 @@ export default {
     };
 
     const upgradePlan = () => {
+      // Track upgrade interest
+      trackUpgradeClick('account_page');
+      
       // Navigate to billing/upgrade page in main app
       const targetApp = import.meta.env.PROD ? 'https://canonical-prod.web.app' : 'https://canonical-dev.web.app';
       window.open(`${targetApp}/billing`, '_blank');
     };
 
     const createProject = () => {
+      // Track project creation interest
+      trackProjectClick('account_page');
+      
       // Navigate to project creation in main app
       const targetApp = import.meta.env.PROD ? 'https://canonical-prod.web.app' : 'https://canonical-dev.web.app';
       window.open(`${targetApp}/new-project`, '_blank');
@@ -404,6 +420,9 @@ export default {
     const launchApp = async () => {
       launchAppLoading.value = true;
       
+      // Track app launch from account page
+      trackAppLaunch('account_page', 'authenticated');
+      
       try {
         await handleLaunchApp(user.value);
       } finally {
@@ -413,11 +432,13 @@ export default {
 
     // Consent management functions
     const openConsentModal = () => {
+      trackConsentAction('manage_preferences_click');
       showConsentModal.value = true;
     };
 
     const resetConsent = async () => {
       if (confirm('Are you sure you want to reset your privacy preferences to defaults? This will disable all optional tracking.')) {
+        trackConsentAction('reset_to_defaults_click');
         await resetConsentState();
       }
     };
@@ -434,6 +455,11 @@ export default {
     };
 
     onMounted(() => {
+      // Track account page view
+      trackPageView('manage_account', {
+        user_type: 'authenticated'
+      });
+
       // Check if user is authenticated
       const unsubscribe = onAuthStateChange((authUser) => {
         if (authUser) {

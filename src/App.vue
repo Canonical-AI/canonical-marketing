@@ -364,6 +364,7 @@ import {
 import { onAuthStateChange, signOutUser, signInWithEmail, signInWithSocial, googleProvider, githubProvider, handleLaunchApp as launchApp } from './firebase.js';
 import ConsentModal from './components/ConsentModal.vue';
 import { useConsent } from './composables/useConsent.js';
+import { useAnalytics } from './composables/useAnalytics.js';
 
 const router = useRouter();
 
@@ -387,7 +388,19 @@ const {
   applyConsentSettings
 } = useConsent();
 
+// Analytics setup
+const {
+  trackNavigation,
+  trackAppLaunch,
+  trackSignInAttempt,
+  trackSignInSuccess,
+  trackSignOut,
+  trackError,
+  trackConsentAction
+} = useAnalytics();
+
 const scrollToSection = (sectionId) => {
+  trackNavigation(sectionId, 'nav_scroll');
   const element = document.getElementById(sectionId);
   if (element) {
     element.scrollIntoView({ behavior: 'smooth' });
@@ -401,6 +414,7 @@ const getInitial = (email) => {
 
 // Auth functions
 const handleSignIn = () => {
+  trackNavigation('signin_modal', 'auth_cta');
   showSignInModal.value = true;
   signInError.value = '';
 };
@@ -414,13 +428,20 @@ const handleEmailSignIn = async () => {
   signInLoading.value = true;
   signInError.value = '';
 
+  // Track sign in attempt
+  trackSignInAttempt('email');
+
   try {
     const { user: authUser, error } = await signInWithEmail(signInEmail.value, signInPassword.value);
     
     if (error) {
       signInError.value = error;
+      trackError('signin_error', error, 'email_signin');
       return;
     }
+
+    // Track successful sign in
+    trackSignInSuccess('email');
 
     // Successfully signed in
     showSignInModal.value = false;
@@ -429,6 +450,7 @@ const handleEmailSignIn = async () => {
     router.push('/manage-account');
   } catch (err) {
     signInError.value = 'Failed to sign in. Please try again.';
+    trackError('signin_exception', err.message, 'email_signin');
   } finally {
     signInLoading.value = false;
   }
@@ -438,20 +460,28 @@ const handleSocialSignIn = async (provider) => {
   signInLoading.value = true;
   signInError.value = '';
 
+  // Track social sign in attempt
+  trackSignInAttempt(provider);
+
   try {
     const authProvider = provider === 'google' ? googleProvider : githubProvider;
     const { user: authUser, error } = await signInWithSocial(authProvider);
     
     if (error) {
       signInError.value = error;
+      trackError('signin_error', error, `${provider}_signin`);
       return;
     }
+
+    // Track successful social sign in
+    trackSignInSuccess(provider);
 
     // Successfully signed in
     showSignInModal.value = false;
     router.push('/manage-account');
   } catch (err) {
     signInError.value = `Failed to sign in with ${provider}. Please try again.`;
+    trackError('signin_exception', err.message, `${provider}_signin`);
   } finally {
     signInLoading.value = false;
   }
@@ -459,10 +489,12 @@ const handleSocialSignIn = async (provider) => {
 
 const handleSignOut = async () => {
   try {
+    trackSignOut();
     await signOutUser();
     router.push('/');
   } catch (err) {
     console.error('Sign out error:', err);
+    trackError('signout_error', err.message, 'signout');
   }
 };
 
@@ -476,6 +508,10 @@ const closeSignInModal = () => {
 // Launch App with Authentication Handoff
 const handleLaunchApp = async () => {
   launchAppLoading.value = true;
+  
+  // Track app launch attempt
+  const userType = user.value ? 'authenticated' : 'anonymous';
+  trackAppLaunch('header_button', userType);
   
   try {
     await launchApp(user.value);
