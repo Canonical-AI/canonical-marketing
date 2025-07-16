@@ -3,6 +3,9 @@ import App from './src/App.vue';
 import router from './src/router.js';
 import './src/style.css';
 
+// Initialize Google Analytics early
+import './src/utils/analytics-init.js';
+
 // Vuetify
 import 'vuetify/styles';
 import { createVuetify } from 'vuetify';

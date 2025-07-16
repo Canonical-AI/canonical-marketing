@@ -13,10 +13,10 @@
           <div class="md:text-lg lg:text-2xl typing mb-8 text-warning font-semibold border-r-2 border-warning">> {{ currentPhrase }}</div>
           <div class="space-y-4">
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
-              <router-link to="/signup" class="inline-block bg-warning md:text-lg lg:text-xl text-white px-8 py-3 rounded-full hover:bg-primary-darken-1 transition-colors shadow-lg">
+              <router-link to="/signup" @click="handleSignupClick" class="inline-block bg-warning md:text-lg lg:text-xl text-white px-8 py-3 rounded-full hover:bg-primary-darken-1 transition-colors shadow-lg">
                 Get Started Free <v-icon>mdi-rocket-launch</v-icon>
               </router-link>
-              <a href="https://canonical-prod.web.app/document/7Smjq3YGDK2YW2ULrbMv?v=1.0.0" target="_blank" rel="noopener noreferrer" class="inline-block border-2 border-white text-white md:text-lg lg:text-xl px-8 py-3 rounded-full hover:bg-white hover:text-surface transition-colors shadow-lg">
+              <a href="https://canonical-prod.web.app/document/7Smjq3YGDK2YW2ULrbMv?v=1.0.0" @click="openDemo" target="_blank" rel="noopener noreferrer" class="inline-block border-2 border-white text-white md:text-lg lg:text-xl px-8 py-3 rounded-full hover:bg-white hover:text-surface transition-colors shadow-lg">
                 Try Demo
               </a>
             </div>
@@ -74,7 +74,7 @@
                 Organize your product artifacts to keep stakeholders coordinated, developers building the right thing, 
                 and product strategy on track. Built on best practices from product thought leaders.
               </p>
-              <v-btn color="warning" @click="openDemo">
+              <v-btn color="warning" @click="handleMidDemoClick">
                 Try it now 
               </v-btn>
             </div>
@@ -229,10 +229,10 @@
           
           <div class="space-y-6">
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
-              <router-link to="/signup" class="inline-block bg-warning text-white px-8 py-4 rounded-full hover:bg-primary-darken-1 transition-colors text-xl shadow-lg">
+              <router-link to="/signup" @click="handleCtaSignupClick" class="inline-block bg-warning text-white px-8 py-4 rounded-full hover:bg-primary-darken-1 transition-colors text-xl shadow-lg">
                 Transform Your Product Work 🚀
               </router-link>
-              <a href="https://canonical-prod.web.app/document/7Smjq3YGDK2YW2ULrbMv?v=1.0.0" target="_blank" rel="noopener noreferrer" class="inline-block border-2 border-white/70 text-white/70 px-8 py-4 rounded-full hover:bg-white/70 hover:text-surface transition-colors text-xl shadow-lg">
+              <a href="https://canonical-prod.web.app/document/7Smjq3YGDK2YW2ULrbMv?v=1.0.0" @click="handleCtaDemoClick" target="_blank" rel="noopener noreferrer" class="inline-block border-2 border-white/70 text-white/70 px-8 py-4 rounded-full hover:bg-white/70 hover:text-surface transition-colors text-xl shadow-lg">
                 Try Demo First
               </a>
             </div>
@@ -266,6 +266,17 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
+import { useAnalytics } from '../composables/useAnalytics.js';
+
+// Analytics setup
+const {
+  trackHomepageView,
+  trackDemoClick,
+  trackSignupClick,
+  trackDemoInterest,
+  trackSignupInterest,
+  trackFeaturesView
+} = useAnalytics();
 
 const phrases = ref([
   'Organize Product Artifacts.',
@@ -303,14 +314,46 @@ const typePhrase = () => {
   setTimeout(typePhrase, isDeleting ? deletingSpeed : typingSpeed);
 };
 
+// Enhanced demo function with analytics
 const openDemo = () => {
+  // Track demo click for conversion analysis
+  trackDemoClick('homepage_hero', 'external');
+  trackDemoInterest('homepage_hero');
+  
   if (typeof window !== 'undefined') {
     window.open('https://canonical-prod.web.app', '_blank');
   }
 };
 
+// Track signup clicks
+const handleSignupClick = () => {
+  trackSignupClick('homepage_hero');
+  trackSignupInterest('homepage_hero');
+};
+
+// Track CTA demo clicks
+const handleCtaDemoClick = () => {
+  trackDemoClick('homepage_cta', 'external');
+  trackDemoInterest('homepage_cta');
+};
+
+// Track CTA signup clicks  
+const handleCtaSignupClick = () => {
+  trackSignupClick('homepage_cta');
+  trackSignupInterest('homepage_cta');
+};
+
+// Track middle section demo clicks
+const handleMidDemoClick = () => {
+  trackDemoClick('homepage_middle', 'external');
+  trackDemoInterest('homepage_middle');
+};
+
 onMounted(() => {
   typePhrase();
+  
+  // Track homepage view for funnel analysis
+  trackHomepageView();
 });
 </script>
 

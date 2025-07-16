@@ -180,11 +180,21 @@ import { ref, onMounted, onUnmounted, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import hoverEffect from 'hover-effect';
 import { signUpWithEmail, signInWithSocial, googleProvider, githubProvider } from '../firebase.js';
+import { useAnalytics } from '../composables/useAnalytics.js';
 
 export default {
   name: 'SignupPage',
   setup() {
     const router = useRouter();
+    
+    // Analytics setup
+    const {
+      trackPageView,
+      trackSignupComplete,
+      trackSignInAttempt,
+      trackAccountCreated,
+      trackError
+    } = useAnalytics();
     
     const error = ref('');
     const emailLoading = ref(false);
@@ -272,6 +282,9 @@ export default {
       error.value = '';
       emailLoading.value = true;
       
+      // Track signup attempt
+      trackSignInAttempt('email');
+      
       // Trigger transition effect
       createTransitionEffect();
       
@@ -280,8 +293,14 @@ export default {
         
         if (authError) {
           error.value = authError;
+          // Track signup error
+          trackError('signup_error', authError, 'email_signup');
           return;
         }
+        
+        // Track successful signup
+        trackSignupComplete('email', 'signup_page');
+        trackAccountCreated('email');
         
         // Successfully created account - redirect to main app with user info
         // Use canonical-prod.web.app for production, canonical-dev.web.app for development
@@ -291,6 +310,8 @@ export default {
       } catch (err) {
         console.error('Signup error:', err);
         error.value = 'Failed to create account. Please try again.';
+        // Track unexpected error
+        trackError('signup_exception', err.message, 'email_signup');
       } finally {
         emailLoading.value = false;
       }
@@ -299,6 +320,9 @@ export default {
     const handleSocialSignUp = async (provider) => {
       error.value = '';
       socialLoading.value = provider;
+      
+      // Track social signup attempt
+      trackSignInAttempt(provider);
       
       // Trigger transition effect
       createTransitionEffect();
@@ -309,8 +333,14 @@ export default {
         
         if (authError) {
           error.value = authError;
+          // Track signup error
+          trackError('signup_error', authError, `${provider}_signup`);
           return;
         }
+        
+        // Track successful social signup
+        trackSignupComplete(provider, 'signup_page');
+        trackAccountCreated(provider);
         
         // Successfully signed up with social - redirect to main app
         const targetApp = import.meta.env.PROD ? 'https://canonical-prod.web.app' : 'https://canonical-dev.web.app';
@@ -319,12 +349,20 @@ export default {
       } catch (err) {
         console.error('Social signup error:', err);
         error.value = `Failed to sign up with ${provider}. Please try again.`;
+        // Track unexpected error
+        trackError('signup_exception', err.message, `${provider}_signup`);
       }  finally {
         socialLoading.value = '';
       }
     };
     
     onMounted(() => {
+      // Track signup page view
+      trackPageView('signup_page', {
+        referrer: document.referrer,
+        user_intent: 'signup'
+      });
+      
       // Initialize hover effect after component mounts
       setTimeout(() => {
         initializeHoverEffect();
